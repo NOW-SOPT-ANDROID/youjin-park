@@ -1,5 +1,6 @@
 package com.sopt.now
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -37,8 +38,22 @@ class SignUpActivity : AppCompatActivity() {
             !isValidPw -> "Password는 8~12 글자여야 합니다."
             isValidName -> "공백으로만 이루어진 닉네임은 불가합니다."
             isEmpty -> "모든 정보를 입력해주세요."
-            else -> "회원가입 성공!"
+            else -> {
+                moveToLogin(userId, userPw, userName)
+                "회원가입 성공!"
+            }
         }
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    // 로그인 페이지로 이동
+    private fun moveToLogin(userId: String, userPw: String, userName: String) {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            putExtra("userId", userId)
+            putExtra("userPw", userPw)
+            putExtra("userName", userName)
+        }
+        setResult(RESULT_OK, intent)
+        finish()
     }
 }
