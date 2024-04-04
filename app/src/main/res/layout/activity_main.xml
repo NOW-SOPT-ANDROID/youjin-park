@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="@+id/img_profile" />
 
     <TextView
-        android:id="@+id/tv_message"
+        android:id="@+id/tv_mbti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title_login"

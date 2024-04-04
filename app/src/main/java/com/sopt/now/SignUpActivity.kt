@@ -39,7 +39,7 @@ class SignUpActivity : AppCompatActivity() {
             isValidName -> "공백으로만 이루어진 닉네임은 불가합니다."
             isEmpty -> "모든 정보를 입력해주세요."
             else -> {
-                moveToLogin(userId, userPw, userName)
+                moveToLogin(userId, userPw, userName, userMbti)
                 "회원가입 성공!"
             }
         }
@@ -47,11 +47,12 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     // 로그인 페이지로 이동
-    private fun moveToLogin(userId: String, userPw: String, userName: String) {
+    private fun moveToLogin(userId: String, userPw: String, userName: String, userMbti: String) {
         val intent = Intent(this, LoginActivity::class.java).apply {
             putExtra("userId", userId)
             putExtra("userPw", userPw)
             putExtra("userName", userName)
+            putExtra("userMbti", userMbti)
         }
         setResult(RESULT_OK, intent)
         finish()

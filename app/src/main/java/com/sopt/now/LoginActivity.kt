@@ -14,6 +14,7 @@ class LoginActivity : AppCompatActivity() {
     var userId = ""
     var userPw = ""
     var userName = ""
+    var userMbti = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
                 userId = result.data!!.getStringExtra("userId").toString()
                 userPw = result.data!!.getStringExtra("userPw").toString()
                 userName = result.data!!.getStringExtra("userName").toString()
+                userMbti = result.data!!.getStringExtra("userMbti").toString()
             }
         }
     }
@@ -53,16 +55,17 @@ class LoginActivity : AppCompatActivity() {
         var inputPw = binding.etPw.text.toString()
 
         if(inputId == userId && inputPw == userPw){
-            moveToMain(userId, userPw, userName)
+            moveToMain(userId, userPw, userName, userMbti)
         }
     }
 
     // 메인 페이지로 이동
-    private fun moveToMain(userId: String, userPw: String, userName: String) {
+    private fun moveToMain(userId: String, userPw: String, userName: String, userMbti: String) {
         val intent = Intent(this, MainActivity::class.java).apply {
             putExtra("userId", userId)
             putExtra("userPw", userPw)
             putExtra("userName", userName)
+            putExtra("userMbti", userMbti)
         }
         startActivity(intent)
         Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
