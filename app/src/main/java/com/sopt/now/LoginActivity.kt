@@ -2,6 +2,7 @@ package com.sopt.now
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -64,5 +65,6 @@ class LoginActivity : AppCompatActivity() {
             putExtra("userName", userName)
         }
         startActivity(intent)
+        Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
     }
 }
