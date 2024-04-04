@@ -16,7 +16,7 @@
         android:layout_marginTop="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"/>
+        android:src="@drawable/img_profile"/>
 
     <TextView
         android:id="@+id/tv_name"
