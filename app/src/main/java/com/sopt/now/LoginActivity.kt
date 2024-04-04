@@ -19,15 +19,14 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 회원가입 화면으로 이동하는 람다 함수 정의
-        val signUpAction = {
-            val intent = Intent(this, SignUpActivity::class.java)
-            signUpLauncher.launch(intent) // ActivityResultLauncher 실행
+        binding.btnLogin.setOnClickListener {
+            checkLogin()
         }
 
         // 회원가입 페이지로 이동
         binding.tvSignUp.setOnClickListener {
-            signUpAction.invoke()
+            val intent = Intent(this, SignUpActivity::class.java)
+            signUpLauncher.launch(intent) // ActivityResultLauncher 실행
         }
     }
 
@@ -45,5 +44,25 @@ class LoginActivity : AppCompatActivity() {
                 userName = result.data!!.getStringExtra("userName").toString()
             }
         }
+    }
+
+    // 로그인
+    private fun checkLogin(){
+        var inputId = binding.etId.text.toString()
+        var inputPw = binding.etPw.text.toString()
+
+        if(inputId == userId && inputPw == userPw){
+            moveToMain(userId, userPw, userName)
+        }
+    }
+
+    // 메인 페이지로 이동
+    private fun moveToMain(userId: String, userPw: String, userName: String) {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("userId", userId)
+            putExtra("userPw", userPw)
+            putExtra("userName", userName)
+        }
+        startActivity(intent)
     }
 }
