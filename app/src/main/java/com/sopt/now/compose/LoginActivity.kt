@@ -1,6 +1,9 @@
 package com.sopt.now.compose
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -24,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -42,6 +46,12 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val userId = intent.getStringExtra("userId").toString()
+                    val userPw = intent.getStringExtra("userPw").toString()
+                    val userName = intent.getStringExtra("userName").toString()
+                    val userMbti = intent.getStringExtra("userMbti").toString()
+
+                    LoginCompose(userId, userPw, userName ,userMbti)
                 }
             }
         }
@@ -49,12 +59,15 @@ class LoginActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginCompose(){
-    var userId by remember { mutableStateOf("") }
-    var userPw by remember { mutableStateOf("") }
+fun LoginCompose(userId: String, userPw: String, userName: String, userMbti: String) {
+    val context = LocalContext.current
+    var inputId by remember { mutableStateOf("") }
+    var inputPw by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 30.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 30.dp),
     ) {
         Spacer(modifier = Modifier.height(60.dp))
         Text(
@@ -73,8 +86,8 @@ fun LoginCompose(){
         )
         Spacer(modifier = Modifier.height(10.dp))
         TextField(
-            value = userId,
-            onValueChange = { userId = it },
+            value = inputId,
+            onValueChange = { inputId = it },
             modifier = Modifier.fillMaxWidth(),
             label = { Text("아이디를 입력하세요.") },
             singleLine = true, //단일 줄로 제한
@@ -88,8 +101,8 @@ fun LoginCompose(){
         )
         Spacer(modifier = Modifier.height(10.dp))
         TextField(
-            value = userPw,
-            onValueChange = { userPw = it },
+            value = inputPw,
+            onValueChange = { inputPw = it },
             modifier = Modifier.fillMaxWidth(),
             label = { Text("비밀번호를 입력하세요.") },
             singleLine = true, //단일 줄로 제한
@@ -98,7 +111,12 @@ fun LoginCompose(){
         )
         Spacer(modifier = Modifier.weight(2f))
         Button(
-            onClick = { /* 클릭 시 수행될 동작 */ },
+            onClick = {
+                // 로그인
+                if(userId == inputId && userPw == inputPw){
+                    moveToMain(context, userId, userPw, userName ,userMbti)
+                }
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
             shape = RoundedCornerShape(50.dp),
             modifier = Modifier.fillMaxWidth()
@@ -107,7 +125,11 @@ fun LoginCompose(){
         }
         Spacer(modifier = Modifier.height(10.dp))
         Button(
-            onClick = { /* 클릭 시 수행될 동작 */ },
+            onClick = {
+                // 회원가입 페이지로 이동
+                val intent = Intent(context, SignUpActivity::class.java)
+                context.startActivity(intent)
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
             shape = RoundedCornerShape(50.dp),
             modifier = Modifier.fillMaxWidth()
@@ -118,10 +140,22 @@ fun LoginCompose(){
     }
 }
 
+// 메인 페이지로 이동
+private fun moveToMain(context: Context, userId: String, userPw: String, userName: String, userMbti: String) {
+    val intent = Intent(context, MainActivity::class.java).apply {
+        putExtra("userId", userId)
+        putExtra("userPw", userPw)
+        putExtra("userName", userName)
+        putExtra("userMbti", userMbti)
+    }
+    context.startActivity(intent)
+    Toast.makeText(context, "로그인 성공!", Toast.LENGTH_SHORT).show()
+}
+
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
     NOWSOPTAndroidTheme {
-        LoginCompose()
+        LoginCompose("","","","")
     }
 }
