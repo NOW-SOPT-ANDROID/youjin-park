@@ -34,6 +34,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val userId = intent.getStringExtra("userId")?: ""
+                    val userPw = intent.getStringExtra("userPw")?: ""
+                    val userName = intent.getStringExtra("userName")?: ""
+                    val userMbti = intent.getStringExtra("userMbti")?: ""
+
+                    MainCompose(userId, userPw, userName, userMbti)
                 }
             }
         }
@@ -41,7 +47,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainCompose(){
+fun MainCompose(userId: String, userPw: String, userName: String, userMbti: String){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,7 +67,7 @@ fun MainCompose(){
             )
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = "userName",
+                text = userName,
                 fontSize = 20.sp
             )
         }
@@ -72,7 +78,7 @@ fun MainCompose(){
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "userId",
+            text = userId,
             fontSize = 20.sp
         )
         Spacer(modifier = Modifier.height(30.dp))
@@ -82,7 +88,7 @@ fun MainCompose(){
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "userPw",
+            text = userPw,
             fontSize = 20.sp,
         )
         Spacer(modifier = Modifier.height(30.dp))
@@ -92,7 +98,7 @@ fun MainCompose(){
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "userMbti",
+            text = userMbti,
             fontSize = 20.sp,
         )
     }
@@ -102,6 +108,6 @@ fun MainCompose(){
 @Composable
 fun MainPreview() {
     NOWSOPTAndroidTheme {
-        MainCompose()
+        MainCompose("nowSopt", "password123", "UserName", "ISTP")
     }
 }
