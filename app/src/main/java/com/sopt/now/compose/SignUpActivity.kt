@@ -1,6 +1,7 @@
 package com.sopt.now.compose
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -155,10 +156,22 @@ fun checkSignUp(context: Context, userId: String, userPw: String, userName: Stri
         isValidName -> "공백으로만 이루어진 닉네임은 불가합니다."
         isEmpty -> "모든 정보를 입력해주세요."
         else -> {
+            moveToLogin(context, userId, userPw, userName, userMbti)
             "회원가입 성공!"
         }
     }
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+// 로그인 페이지로 이동
+private fun moveToLogin(context: Context, userId: String, userPw: String, userName: String, userMbti: String) {
+    val intent = Intent(context, LoginActivity::class.java).apply {
+        putExtra("userId", userId)
+        putExtra("userPw", userPw)
+        putExtra("userName", userName)
+        putExtra("userMbti", userMbti)
+    }
+    context.startActivity(intent)
 }
 
 @Preview(showBackground = true)
