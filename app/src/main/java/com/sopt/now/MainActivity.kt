@@ -2,7 +2,10 @@ package com.sopt.now
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.sopt.now.databinding.ActivityMainBinding
+import com.sopt.now.test.HomeFragment
+import com.sopt.now.test.SearchFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,19 +16,43 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setUserInfo()
+        val currentFragment = supportFragmentManager.findFragmentById(binding.fcvHome.id)
+        if (currentFragment == null){
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fcv_home, HomeFragment())
+                .commit()
+        }
+        clickBottomNavigation()
     }
 
-    // 사용자 정보 세팅
-    private fun setUserInfo(){
-        val userId = intent.getStringExtra("userId")
-        val userPw = intent.getStringExtra("userPw")
-        val userName = intent.getStringExtra("userName")
-        val userMbti = intent.getStringExtra("userMbti")
 
-        binding.userId.text = userId
-        binding.userPw.text = userPw
-        binding.tvName.text = userName
-        binding.tvMbti.text = userMbti
+
+    private fun clickBottomNavigation() {
+        binding.bnvHome.setOnItemSelectedListener{
+            when (it.itemId) {
+                R.id.menu_home-> {
+                    replaceFragment(HomeFragment())
+                    true
+                }
+
+                R.id.menu_search-> {
+                    replaceFragment(SearchFragment())
+                    true
+                }
+
+                R.id.menu_mypage-> {
+                    replaceFragment(SearchFragment())
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fcv_home, fragment)
+            .commit()
     }
 }
