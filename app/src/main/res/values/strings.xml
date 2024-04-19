@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">NOW SOPT Android</string>
+    <string name="title_login">Welcome to SOPT</string>
+    <string name="btn_sign_up">회원가입</string>
+    <string name="btn_login">로그인</string>
+    <string name="tv_id">ID</string>
+    <string name="hint_id">아이디를 입력해주세요.</string>
+    <string name="tv_pw">비밀번호</string>
+    <string name="hint_pw">비밀번호를 입력해주세요.</string>
+
+    <string name="title_sign_up">SIGN UP</string>
+    <string name="tv_user_name">닉네임</string>
+    <string name="hint_user_name">닉네임을 입력해주세요.</string>
+    <string name="tv_user_description">한 줄 소개</string>
+    <string name="hint_user_description">한 줄 소개를 입력해주세요.</string>
+
+    <string name="error_invalid_id">ID는 6~10 글자여야 합니다.</string>
+    <string name="error_invalid_pw">Password는 8~12 글자여야 합니다.</string>
+    <string name="error_empty_name">공백으로만 이루어진 닉네임은 불가합니다.</string>
+    <string name="signup_success">회원가입 성공!</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 </resources>
