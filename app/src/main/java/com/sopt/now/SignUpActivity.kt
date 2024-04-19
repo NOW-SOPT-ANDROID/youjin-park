@@ -16,15 +16,21 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 회원 가입
-        binding.btnSignUp.setOnClickListener {
-            val userId = binding.etSignUpId.text.toString()
-            val userPw = binding.etSignUpPw.text.toString()
-            val userName = binding.etSignUpName.text.toString()
-            val userDescription = binding.etSignUpDescription.text.toString()
+        clickSignUpButton()
+    }
 
-            val userData = UserData(userId, userPw, userName, userDescription)
-            checkSignUp(userData)
+    // 회원 가입
+    private fun clickSignUpButton() {
+        binding.btnSignUp.setOnClickListener {
+            with(binding) {
+                val userId = etSignUpId.text.toString()
+                val userPw = etSignUpPw.text.toString()
+                val userName = etSignUpName.text.toString()
+                val selfDescription = etSignUpDescription.text.toString()
+
+                val userData = UserData(userId, userPw, userName, selfDescription)
+                checkSignUp(userData)
+            }
         }
     }
 
