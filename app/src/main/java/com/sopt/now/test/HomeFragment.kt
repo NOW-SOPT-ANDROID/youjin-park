@@ -27,14 +27,13 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val friendAdapter = FriendAdapter()
-        binding.rvFriends.run {
-            adapter = friendAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
-        friendAdapter.setFriendList(mockFriendList)
-    }
 
+        val friendAdapter = FriendAdapter(mockFriendList)
+        binding.rvFriends.run {
+            layoutManager = LinearLayoutManager(requireContext())
+            setAdapter(friendAdapter)
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -42,19 +41,59 @@ class HomeFragment: Fragment() {
 
     private val mockFriendList = listOf<Friend>(
         Friend(
-            profileImage = R.drawable.img_profile,
-            name = "이의경",
-            selfDescription = "ㅎㅎ 아직 반도 안왔어 ^&^",
+            profileImage = R.drawable.iv_user_profile,
+            name = "박유진",
+            selfDescription = "안녕하세요! YB 박유진입니다.",
         ),
         Friend(
-            profileImage = R.drawable.img_profile,
-            name = "우상욱",
-            selfDescription = "나보다 안드 잘하는 사람 있으면 나와봐",
+            profileImage = R.drawable.iv_friend_profile,
+            name = "AAA",
+            selfDescription = "AAA님의 한 줄 소개",
         ),
         Friend(
-            profileImage = R.drawable.img_profile,
-            name = "배지현",
-            selfDescription = "표정 풀자 ^^",
+            profileImage = R.drawable.iv_friend_profile,
+            name = "BBB",
+            selfDescription = "BBB님의 한 줄 소개",
         ),
+        Friend(
+            profileImage = R.drawable.iv_friend_profile,
+            name = "CCC",
+            selfDescription = "CCC님의 한 줄 소개",
+        ),
+        Friend(
+            profileImage = R.drawable.iv_friend_profile,
+            name = "DDD",
+            selfDescription = "DDD님의 한 줄 소개",
+        ),
+        Friend(
+            profileImage = R.drawable.iv_friend_profile,
+            name = "EEE",
+            selfDescription = "EEE님의 한 줄 소개",
+        ),
+        Friend(
+            profileImage = R.drawable.iv_friend_profile,
+            name = "FFF",
+            selfDescription = "FFF님의 한 줄 소개",
+        ),
+        Friend(
+            profileImage = R.drawable.iv_friend_profile,
+            name = "GGG",
+            selfDescription = "GGG님의 한 줄 소개",
+        ),
+        Friend(
+            profileImage = R.drawable.iv_friend_profile,
+            name = "HHH",
+            selfDescription = "HHH님의 한 줄 소개",
+        ),
+        Friend(
+            profileImage = R.drawable.iv_friend_profile,
+            name = "III",
+            selfDescription = "III님의 한 줄 소개",
+        ),
+        Friend(
+            profileImage = R.drawable.iv_friend_profile,
+            name = "JJJ",
+            selfDescription = "JJJ님의 한 줄 소개",
+        )
     )
 }
