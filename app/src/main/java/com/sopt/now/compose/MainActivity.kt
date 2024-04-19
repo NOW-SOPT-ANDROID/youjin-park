@@ -3,26 +3,29 @@ package com.sopt.now.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,12 +37,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val userId = intent.getStringExtra("userId")?: ""
-                    val userPw = intent.getStringExtra("userPw")?: ""
-                    val userName = intent.getStringExtra("userName")?: ""
-                    val userMbti = intent.getStringExtra("userMbti")?: ""
 
-                    MainCompose(userId, userPw, userName, userMbti)
+                    val userId = intent.getStringExtra("userId").toString()
+                    val userPw = intent.getStringExtra("userPw").toString()
+                    val userName = intent.getStringExtra("userName").toString()
+                    val userDescription = intent.getStringExtra("userDescription").toString()
+
+                    ScaffoldExample(
+                        userId = userId,
+                        userPw = userPw,
+                        userName = userName,
+                        userDescription = userDescription
+                    )
                 }
             }
         }
@@ -47,60 +56,55 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainCompose(userId: String, userPw: String, userName: String, userMbti: String){
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 30.dp),
-    ) {
-        Spacer(modifier = Modifier.height(60.dp))
-        Row (
+fun ScaffoldExample(userId: String, userPw: String, userName: String, userDescription: String) {
+    var selectedItem by remember { mutableIntStateOf(0) }
+    val items = listOf(
+        BottomNavigationItem(
+            icon = Icons.Filled.Home,
+            label = "Home"
+        ),
+        BottomNavigationItem(
+            icon = Icons.Filled.Search,
+            label = "Search"
+        ),
+        BottomNavigationItem(
+            icon = Icons.Filled.Person,
+            label = "Profile"
+        )
+    )
+
+    Scaffold(
+        bottomBar = {
+            NavigationBar {
+                items.forEachIndexed { index, item ->
+                    NavigationBarItem(
+                        icon = { Icon(item.icon, contentDescription = item.label) },
+                        label = { Text(item.label) },
+                        selected = selectedItem == index,
+                        onClick = { selectedItem = index }
+                    )
+                }
+            }
+        },
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-            .fillMaxWidth()
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.img_profile),
-                contentDescription = "Profile",
-                Modifier
-                    .size(100.dp)
-                    .aspectRatio(1f/1f)
-            )
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(
-                text = userName,
-                fontSize = 20.sp
-            )
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            when(selectedItem) {
+                0 -> {
+                    HomeView()
+                }
+                1 -> {
+                    Text(text ="Search")
+                }
+                2 -> {
+                    MyPageView(userId, userPw, userName, userDescription)
+                }
+            }
+
         }
-        Spacer(modifier = Modifier.height(60.dp))
-        Text(
-            text = "ID",
-            fontSize = 20.sp
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = userId,
-            fontSize = 20.sp
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = "PW",
-            fontSize = 20.sp,
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = userPw,
-            fontSize = 20.sp,
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = "MBTI",
-            fontSize = 20.sp,
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = userMbti,
-            fontSize = 20.sp,
-        )
     }
 }
 
@@ -108,6 +112,6 @@ fun MainCompose(userId: String, userPw: String, userName: String, userMbti: Stri
 @Composable
 fun MainPreview() {
     NOWSOPTAndroidTheme {
-        MainCompose("nowSopt", "password123", "UserName", "ISTP")
+        ScaffoldExample("Id1234", "Password123", "UserName", "INFJ 입니다!")
     }
 }
