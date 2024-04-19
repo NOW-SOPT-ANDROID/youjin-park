@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.sopt.now.databinding.FragmentMypageBinding
+import com.sopt.now.test.data.UserData
 
 class MyPageFragment: Fragment() {
     private var _binding: FragmentMypageBinding? = null
@@ -23,7 +24,20 @@ class MyPageFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // 기존 액티비티의 onCreate에 작성했던 init로직을 이제는 여기에 작성합니다.
+
+        setupUserData()
+    }
+
+    // 받아온 UserData 적용
+    private fun setupUserData() {
+        arguments?.getParcelable<UserData>("userData")?.let { userData ->
+            with(binding) {
+                tvMyName.text = userData.userName
+                tvMyDescription.text = userData.selfDescription
+                tvMyId.text = userData.userId
+                tvMyPw.text = userData.userPw
+            }
+        }
     }
 
     override fun onDestroyView() {
