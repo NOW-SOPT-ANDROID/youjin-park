@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.test.HomeFragment
+import com.sopt.now.test.MyPageFragment
 import com.sopt.now.test.SearchFragment
+import com.sopt.now.test.data.UserData
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,9 +27,9 @@ class MainActivity : AppCompatActivity() {
         clickBottomNavigation()
     }
 
-
-
     private fun clickBottomNavigation() {
+        val userData = intent.getParcelableExtra<UserData>("userData")
+
         binding.bnvHome.setOnItemSelectedListener{
             when (it.itemId) {
                 R.id.menu_home-> {
@@ -41,10 +43,16 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_mypage-> {
-                    replaceFragment(SearchFragment())
+                    replaceFragment(
+                        MyPageFragment().apply {
+                            arguments = Bundle().apply {
+                                putParcelable("userData", userData)
+
+                            }
+                        }
+                    )
                     true
                 }
-
                 else -> false
             }
         }
