@@ -36,8 +36,8 @@ class SignUpActivity : AppCompatActivity() {
 
     // 회원 가입 가능 여부 체크
     private fun checkSignUp(userData: UserData) {
-        val isValidId = userData.userId.length in 6..10
-        val isValidPw = userData.userPw.length in 8..12
+        val isValidId = userData.userId.length in MIN_ID_LENGTH..MAX_ID_LENGTH
+        val isValidPw = userData.userPw.length in MIN_PW_LENGTH..MAX_PW_LENGTH
         val isValidName = userData.userName.trim().isEmpty() // 공백으로만 이루어진 경우 판단
 
         val message = when {
@@ -59,5 +59,13 @@ class SignUpActivity : AppCompatActivity() {
         }
         setResult(RESULT_OK, intent)
         finish()
+    }
+
+    // 글자 수 제한
+    companion object {
+        private const val MIN_ID_LENGTH = 6
+        private const val MAX_ID_LENGTH = 10
+        private const val MIN_PW_LENGTH = 8
+        private const val MAX_PW_LENGTH = 12
     }
 }
