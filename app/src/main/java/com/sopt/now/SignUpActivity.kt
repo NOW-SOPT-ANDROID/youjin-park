@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.sopt.now.databinding.ActivitySignUpBinding
+import com.sopt.now.test.data.UserData
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -17,29 +18,28 @@ class SignUpActivity : AppCompatActivity() {
 
         // 회원 가입
         binding.btnSignUp.setOnClickListener {
-            val userId = binding.etId.text.toString()
-            val userPw = binding.etPw.text.toString()
-            val userName = binding.etName.text.toString()
-            val userMbti = binding.etMbti.text.toString()
+            val userId = binding.etSignUpId.text.toString()
+            val userPw = binding.etSignUpPw.text.toString()
+            val userName = binding.etSignUpName.text.toString()
+            val userDescription = binding.etSignUpDescription.text.toString()
 
-            checkSignUp(userId, userPw, userName, userMbti)
+            val userData = UserData(userId, userPw, userName, userDescription)
+            checkSignUp(userData)
         }
     }
 
     // 회원 가입 가능 여부 체크
-    private fun checkSignUp(userId: String, userPw: String, userName: String, userMbti: String) {
-        val isValidId = userId.length in 6..10
-        val isValidPw = userPw.length in 8..12
-        val isValidName = userName.trim().isEmpty() // 공백으로만 이루어진 경우 판단
-        val isEmpty = userId.isEmpty() || userId.isEmpty() || userId.isEmpty() || userMbti.isEmpty()
+    private fun checkSignUp(userData: UserData) {
+        val isValidId = userData.userId.length in 6..10
+        val isValidPw = userData.userPw.length in 8..12
+        val isValidName = userData.userName.trim().isEmpty() // 공백으로만 이루어진 경우 판단
 
         val message = when {
             !isValidId -> "ID는 6~10 글자여야 합니다."
             !isValidPw -> "Password는 8~12 글자여야 합니다."
             isValidName -> "공백으로만 이루어진 닉네임은 불가합니다."
-            isEmpty -> "모든 정보를 입력해주세요."
             else -> {
-                moveToLogin(userId, userPw, userName, userMbti)
+                moveToLogin(userData)
                 "회원가입 성공!"
             }
         }
@@ -47,12 +47,9 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     // 로그인 페이지로 이동
-    private fun moveToLogin(userId: String, userPw: String, userName: String, userMbti: String) {
+    private fun moveToLogin(userData: UserData) {
         val intent = Intent(this, LoginActivity::class.java).apply {
-            putExtra("userId", userId)
-            putExtra("userPw", userPw)
-            putExtra("userName", userName)
-            putExtra("userMbti", userMbti)
+            putExtra("userData", userData)
         }
         setResult(RESULT_OK, intent)
         finish()

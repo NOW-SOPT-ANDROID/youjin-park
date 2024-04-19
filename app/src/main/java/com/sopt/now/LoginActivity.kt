@@ -7,25 +7,31 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.sopt.now.databinding.ActivityLoginBinding
+import com.sopt.now.test.data.UserData
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    var userId = ""
-    var userPw = ""
-    var userName = ""
-    var userMbti = ""
+    private var userData: UserData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        clickLoginButton()
+        clickSignUpTextView()
+    }
+
+    // 로그인
+    private fun clickLoginButton() {
         binding.btnLogin.setOnClickListener {
             checkLogin()
         }
+    }
 
-        // 회원가입 페이지로 이동
+    // 회원가입 페이지로 이동
+    private fun clickSignUpTextView() {
         binding.tvSignUp.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             signUpLauncher.launch(intent) // ActivityResultLauncher 실행
@@ -41,31 +47,33 @@ class LoginActivity : AppCompatActivity() {
     private fun handleSignUpResult(result: ActivityResult) {
         when (result.resultCode) {
             RESULT_OK -> {
-                userId = result.data!!.getStringExtra("userId").toString()
-                userPw = result.data!!.getStringExtra("userPw").toString()
-                userName = result.data!!.getStringExtra("userName").toString()
-                userMbti = result.data!!.getStringExtra("userMbti").toString()
+                result.data?.getParcelableExtra<UserData>("userData")?.let { data ->
+                    userData = data
+                }
             }
         }
     }
 
     // 로그인
     private fun checkLogin(){
-        var inputId = binding.etId.text.toString()
-        var inputPw = binding.etPw.text.toString()
+        userData?.let { userData ->
+            val inputId = binding.etLoginId.text.toString()
+            val inputPw = binding.etLoginPw.text.toString()
 
-        if(inputId == userId && inputPw == userPw){
-            moveToMain(userId, userPw, userName, userMbti)
+            // 아이디, 비번 확인
+            if (inputId == userData.userId && inputPw == userData.userPw) {
+                moveToMain(userData)
+            }
+            else {
+                Toast.makeText(this, "아이디 또는 비밀번호가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     // 메인 페이지로 이동
-    private fun moveToMain(userId: String, userPw: String, userName: String, userMbti: String) {
+    private fun moveToMain(userData: UserData) {
         val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("userId", userId)
-            putExtra("userPw", userPw)
-            putExtra("userName", userName)
-            putExtra("userMbti", userMbti)
+            putExtra("userData", userData)
         }
         startActivity(intent)
         Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
