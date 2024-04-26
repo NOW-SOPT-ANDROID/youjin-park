@@ -43,14 +43,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_mypage-> {
-                    replaceFragment(
-                        MyPageFragment().apply {
-                            arguments = Bundle().apply {
-                                putParcelable("userData", userData)
-
-                            }
-                        }
-                    )
+                    replaceFragment(MyPageFragment())
                     true
                 }
                 else -> false
