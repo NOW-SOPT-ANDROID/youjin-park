@@ -1,4 +1,4 @@
-package com.sopt.now.test.friend
+package com.sopt.now.test.data
 
 import androidx.annotation.DrawableRes
 

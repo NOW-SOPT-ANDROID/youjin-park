@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.sopt.now.databinding.ItemFriendBinding
 import com.sopt.now.databinding.ItemUserBinding
+import com.sopt.now.test.data.Friend
 
 sealed class BaseViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root)
 

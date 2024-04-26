@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sopt.now.databinding.ItemFriendBinding
 import com.sopt.now.databinding.ItemUserBinding
+import com.sopt.now.test.data.Friend
 
 class FriendAdapter(private val profiles: List<Friend>) : RecyclerView.Adapter<BaseViewHolder>() {
 
