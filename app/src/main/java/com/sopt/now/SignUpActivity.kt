@@ -38,7 +38,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun checkSignUp(userData: UserData) {
         val isValidId = userData.userId.length in MIN_ID_LENGTH..MAX_ID_LENGTH
         val isValidPw = userData.userPw.length in MIN_PW_LENGTH..MAX_PW_LENGTH
-        val isValidName = userData.userName.trim().isEmpty() // 공백으로만 이루어진 경우 판단
+        val isValidName = userData.userName.isBlank() // 공백으로만 이루어진 경우 판단
 
         val message = when {
             !isValidId -> "ID는 6~10 글자여야 합니다."
