@@ -7,7 +7,6 @@ import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.test.HomeFragment
 import com.sopt.now.test.MyPageFragment
 import com.sopt.now.test.SearchFragment
-import com.sopt.now.test.data.UserData
 
 class MainActivity : AppCompatActivity() {
 
