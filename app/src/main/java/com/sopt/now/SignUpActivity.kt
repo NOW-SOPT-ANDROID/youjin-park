@@ -62,10 +62,11 @@ class SignUpActivity : AppCompatActivity() {
 
     // 로그인 페이지로 이동
     private fun moveToLogin(userData: UserData) {
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.putExtra("userData", userData)
-        setResult(RESULT_OK, intent)
-        finish()
+        Intent(this, LoginActivity::class.java).apply {
+            putExtra("userData", userData)
+            setResult(RESULT_OK, this)
+            finish()
+        }
     }
 
     private fun showToast(message: String) {

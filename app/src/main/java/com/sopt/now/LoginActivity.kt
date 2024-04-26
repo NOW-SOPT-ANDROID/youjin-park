@@ -3,7 +3,7 @@ package com.sopt.now
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +17,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var viewModel: UserViewModel
     private var userData: UserData ?= null
+    private lateinit var signUpLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
         val factory = UserViewModelFactory(this)
         viewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
 
+        setSignUpLauncher()
         setupLoginButton()
         setupSignUpTextView()
     }
@@ -40,23 +42,8 @@ class LoginActivity : AppCompatActivity() {
     // 회원가입 페이지로 이동
     private fun setupSignUpTextView() {
         binding.tvSignUp.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
-            signUpLauncher.launch(intent) // ActivityResultLauncher 실행
-        }
-    }
-
-    // ActivityResultLauncher 초기화
-    private val signUpLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        handleSignUpResult(result)
-    }
-
-    // 회원가입 결과 처리
-    private fun handleSignUpResult(result: ActivityResult) {
-        when (result.resultCode) {
-            RESULT_OK -> {
-                result.data?.getParcelableExtra<UserData>("userData")?.let { data ->
-                    userData = data
-                }
+            Intent(this, SignUpActivity::class.java).also {
+                signUpLauncher.launch(it) // ActivityResultLauncher 실행
             }
         }
     }
@@ -69,19 +56,27 @@ class LoginActivity : AppCompatActivity() {
         // 아이디, 비번 확인
         if (inputId == userData.userId && inputPw == userData.userPw) {
             showToast("로그인 성공!")
-            moveToMain(userData)
+            moveToMain()
         } else {
             showToast("아이디 또는 비밀번호가 잘못되었습니다.")
         }
     }
 
     // 메인 페이지로 이동
-    private fun moveToMain(userData: UserData) {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("userData", userData)
+    private fun moveToMain() {
+        Intent(this, MainActivity::class.java).apply {
+            startActivity(this)
+            finish()
         }
-        startActivity(intent)
-        finish()
+    }
+    private fun setSignUpLauncher(){
+        signUpLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                userData = viewModel.getUserData()
+            }
+        }
     }
 
     private fun showToast(message: String) {
