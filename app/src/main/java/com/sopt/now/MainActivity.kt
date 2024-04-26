@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun clickBottomNavigation() {
-        val userData = intent.getParcelableExtra<UserData>("userData")
-
         binding.bnvHome.setOnItemSelectedListener{
             when (it.itemId) {
                 R.id.menu_home-> {
