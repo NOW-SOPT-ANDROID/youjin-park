@@ -4,23 +4,30 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.sopt.now.databinding.ActivitySignUpBinding
+import com.sopt.now.test.data.UserViewModel
 import com.sopt.now.test.data.UserData
+import com.sopt.now.test.data.UserViewModelFactory
 
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
+    private lateinit var viewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        clickSignUpButton()
+        val factory = UserViewModelFactory(this)
+        viewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
+
+        setupSignUpButton()
     }
 
     // 회원 가입
-    private fun clickSignUpButton() {
+    private fun setupSignUpButton() {
         binding.btnSignUp.setOnClickListener {
             with(binding) {
                 val userId = etSignUpId.text.toString()
@@ -49,16 +56,20 @@ class SignUpActivity : AppCompatActivity() {
                 "회원가입 성공!"
             }
         }
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        viewModel.setUserData(userData)
+        showToast(message)
     }
 
     // 로그인 페이지로 이동
     private fun moveToLogin(userData: UserData) {
-        val intent = Intent(this, LoginActivity::class.java).apply {
-            putExtra("userData", userData)
-        }
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.putExtra("userData", userData)
         setResult(RESULT_OK, intent)
         finish()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     // 글자 수 제한
