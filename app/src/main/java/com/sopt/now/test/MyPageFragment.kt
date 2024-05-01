@@ -5,16 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.sopt.now.databinding.FragmentMypageBinding
-import com.sopt.now.test.data.UserViewModel
-import com.sopt.now.test.data.UserViewModelFactory
+import com.sopt.now.test.data.UserPreference
 
 class MyPageFragment : Fragment() {
-    private lateinit var viewModel: UserViewModel
     private var _binding: FragmentMypageBinding? = null
     private val binding: FragmentMypageBinding
         get() = requireNotNull(_binding) { "바인딩 객체 좀 생성해주세요 제발!!" }
+
+    private lateinit var userPreference: UserPreference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,14 +26,13 @@ class MyPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val factory = UserViewModelFactory(requireContext())
-        viewModel = ViewModelProvider(this, factory).get(UserViewModel::class.java)
+        userPreference = UserPreference(requireContext())
         setupUserData()
     }
 
     // 받아온 UserData 적용
     private fun setupUserData() {
-        val userData = viewModel.getUserData()
+        val userData = userPreference.getUserData()
         if (userData != null) {
             with(binding) {
                 tvMyName.text = userData.userName
