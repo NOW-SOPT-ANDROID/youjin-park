@@ -4,24 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.sopt.now.databinding.ActivitySignUpBinding
-import com.sopt.now.test.data.UserViewModel
 import com.sopt.now.test.data.UserData
-import com.sopt.now.test.data.UserViewModelFactory
 
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
-    private lateinit var viewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val factory = UserViewModelFactory(this)
-        viewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
 
         setupSignUpButton()
     }
@@ -56,7 +49,6 @@ class SignUpActivity : AppCompatActivity() {
                 "회원가입 성공!"
             }
         }
-        viewModel.setUserData(userData)
         showToast(message)
     }
 
