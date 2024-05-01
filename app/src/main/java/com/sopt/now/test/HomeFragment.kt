@@ -5,15 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sopt.now.databinding.FragmentHomeBinding
-import com.sopt.now.test.data.mockFriendList
+import com.sopt.now.test.data.HomeViewModel
 import com.sopt.now.test.friend.FriendAdapter
 
 class HomeFragment: Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding) { "바인딩 객체 좀 생성해주세요 제발!!" }
+
+    private val viewModel by viewModels<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,12 +30,18 @@ class HomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val friendAdapter = FriendAdapter(mockFriendList)
+        setRecyclerView()
+    }
+
+    // FriendAdapter 연결
+    private fun setRecyclerView(){
+        val friendAdapter = FriendAdapter(viewModel.mockFriendList)
         binding.rvFriends.run {
             layoutManager = LinearLayoutManager(requireContext())
             setAdapter(friendAdapter)
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
