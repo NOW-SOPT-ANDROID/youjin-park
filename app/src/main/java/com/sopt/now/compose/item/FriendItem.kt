@@ -9,11 +9,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sopt.now.compose.R
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
+
 
 @Composable
 fun FriendItem(profile: Profile) {
@@ -34,13 +36,16 @@ fun FriendItem(profile: Profile) {
             text = profile.userName,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = profile.userDescription,
             fontSize = 20.sp,
             textAlign = TextAlign.End,
-            maxLines = 1
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
