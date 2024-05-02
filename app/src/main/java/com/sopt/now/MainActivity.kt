@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.sopt.now.databinding.ActivityMainBinding
 import com.sopt.now.test.HomeFragment
+import com.sopt.now.test.MyPageFragment
 import com.sopt.now.test.SearchFragment
 
 class MainActivity : AppCompatActivity() {
@@ -25,8 +26,6 @@ class MainActivity : AppCompatActivity() {
         clickBottomNavigation()
     }
 
-
-
     private fun clickBottomNavigation() {
         binding.bnvHome.setOnItemSelectedListener{
             when (it.itemId) {
@@ -41,10 +40,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_mypage-> {
-                    replaceFragment(SearchFragment())
+                    replaceFragment(MyPageFragment())
                     true
                 }
-
                 else -> false
             }
         }

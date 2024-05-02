@@ -4,25 +4,47 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sopt.now.databinding.ItemFriendBinding
+import com.sopt.now.databinding.ItemUserBinding
+import com.sopt.now.test.data.Friend
 
-class FriendAdapter() : RecyclerView.Adapter<FriendViewHolder>() {
-    // 임시의 빈 리스트
-    private var friendList: List<Friend> = emptyList()
+class FriendAdapter(private val profiles: List<Friend>) : RecyclerView.Adapter<BaseViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemFriendBinding.inflate(inflater, parent, false)
-        return FriendViewHolder(binding)
+    // 첫 번째 아이템
+    private val FIRST_ITEM_POSITION = 0
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+        return when (viewType) {
+            Friend.TYPE_USER -> {
+                val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                UserViewHolder(binding)
+            }
+            Friend.TYPE_FRIEND -> {
+                val binding = ItemFriendBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FriendViewHolder(binding)
+            }
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
     }
 
-    override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
-        holder.onBind(friendList[position])
+    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+        val profile = profiles[position]
+
+        when (holder) {
+            is FriendViewHolder -> {
+                holder.onBind(profile)
+            }
+            is UserViewHolder -> {
+                holder.onBind(profile)
+            }
+        }
     }
 
-    override fun getItemCount() = friendList.size
-
-    fun setFriendList(friendList: List<Friend>) {
-        this.friendList = friendList.toList()
-        notifyDataSetChanged() // 권장하지 않음 (비효율)
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            FIRST_ITEM_POSITION -> Friend.TYPE_USER
+            else -> Friend.TYPE_FRIEND
+        }
     }
+
+    override fun getItemCount(): Int = profiles.size
 }

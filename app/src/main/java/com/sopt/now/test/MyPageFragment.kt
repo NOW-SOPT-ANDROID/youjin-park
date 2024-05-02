@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.sopt.now.databinding.FragmentMypageBinding
+import com.sopt.now.test.data.UserPreference
 
-class MyPageFragment: Fragment() {
+class MyPageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
     private val binding: FragmentMypageBinding
         get() = requireNotNull(_binding) { "바인딩 객체 좀 생성해주세요 제발!!" }
+
+    private lateinit var userPreference: UserPreference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +26,21 @@ class MyPageFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // 기존 액티비티의 onCreate에 작성했던 init로직을 이제는 여기에 작성합니다.
+        userPreference = UserPreference(requireContext())
+        setupUserData()
+    }
+
+    // 받아온 UserData 적용
+    private fun setupUserData() {
+        val userData = userPreference.getUserData()
+        if (userData != null) {
+            with(binding) {
+                tvMyName.text = userData.userName
+                tvMyDescription.text = userData.selfDescription
+                tvMyId.text = userData.userId
+                tvMyPw.text = userData.userPw
+            }
+        }
     }
 
     override fun onDestroyView() {
