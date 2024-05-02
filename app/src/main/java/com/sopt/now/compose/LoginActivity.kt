@@ -48,7 +48,7 @@ class LoginActivity : ComponentActivity() {
                     val userName = intent.getStringExtra("userName").toString()
                     val userDescription = intent.getStringExtra("userDescription").toString()
 
-                    LoginCompose(userId, userPw, userName ,userDescription)
+                    LoginView(userId, userPw, userName ,userDescription)
                 }
             }
         }
@@ -56,43 +56,12 @@ class LoginActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginInputField(label: String, value: String, onValueChange: (String) -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(
-            text = label,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Start
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        TextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text(label) },
-            singleLine = true,
-            visualTransformation = if (label == "비밀번호") PasswordVisualTransformation() else VisualTransformation.None,
-            keyboardOptions = if (label == "비밀번호") KeyboardOptions(keyboardType = KeyboardType.Password) else KeyboardOptions.Default
-        )
-    }
-}
-
-@Composable
-fun LoginButton(text: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-        shape = RoundedCornerShape(50.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(text, color = Color.White)
-    }
-}
-
-@Composable
-fun LoginCompose(userId: String, userPw: String, userName: String, userDescription: String) {
+fun LoginView(
+    userId: String,
+    userPw: String,
+    userName: String,
+    userDescription: String
+) {
     val context = LocalContext.current
     var inputId by remember { mutableStateOf("") }
     var inputPw by remember { mutableStateOf("") }
@@ -110,31 +79,107 @@ fun LoginCompose(userId: String, userPw: String, userName: String, userDescripti
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(60.dp))
-        LoginInputField(label = stringResource(id = R.string.tv_id), value = inputId) { inputId = it }
+        LoginInputField(
+            label = stringResource(id = R.string.tv_id),
+            inputData = inputId,
+            isPassword = false
+        ) { inputId = it }
         Spacer(modifier = Modifier.height(60.dp))
-        LoginInputField(label = stringResource(id = R.string.tv_pw), value = inputPw) { inputPw = it }
+        LoginInputField(
+            label = stringResource(id = R.string.tv_pw),
+            inputData = inputPw,
+            isPassword = true
+        ) { inputPw = it }
         Spacer(modifier = Modifier.weight(2f))
-        LoginButton(stringResource(id = R.string.btn_login)) {
-            if (userId == inputId && userPw == inputPw) {
-                moveToMain(context, userId, userPw, userName, userDescription)
+        LoginButton(
+            text = stringResource(id = R.string.btn_login),
+            onClick = {
+                checkLogin(context, userId, userPw, userName, userDescription, inputId, inputPw)
             }
-        }
+        )
         Spacer(modifier = Modifier.height(10.dp))
-        LoginButton(stringResource(id = R.string.btn_sign_up)) {
-            val intent = Intent(context, SignUpActivity::class.java)
-            context.startActivity(intent)
+        LoginButton(
+            stringResource(id = R.string.btn_sign_up)) {
+            Intent(context, SignUpActivity::class.java).apply {
+                context.startActivity(this)
+            }
         }
     }
 }
 
-private fun moveToMain(context: Context, userId: String, userPw: String, userName: String, userDescription: String) {
-    val intent = Intent(context, MainActivity::class.java).apply {
+@Composable
+fun LoginInputField(
+    label: String,
+    inputData: String,
+    isPassword: Boolean,
+    onValueChange: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = label,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Start
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        TextField(
+            value = inputData,
+            onValueChange = onValueChange,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(label) },
+            singleLine = true,
+            visualTransformation =
+            if (isPassword)
+                PasswordVisualTransformation()
+            else VisualTransformation.None,
+            keyboardOptions =
+            if (isPassword)
+                KeyboardOptions(keyboardType = KeyboardType.Password)
+            else KeyboardOptions.Default
+        )
+    }
+}
+@Composable
+fun LoginButton(text: String, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+        shape = RoundedCornerShape(50.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(text, color = Color.White)
+    }
+}
+
+private fun checkLogin(
+    context: Context,
+    userId: String,
+    userPw: String,
+    userName: String,
+    userDescription: String,
+    inputId: String,
+    inputPw: String
+) {
+    if (userId == inputId && userPw == inputPw) {
+        moveToMain(context, userId, userPw, userName, userDescription)
+    }
+}
+
+private fun moveToMain(
+    context: Context,
+    userId: String,
+    userPw: String,
+    userName: String,
+    userDescription: String
+) {
+    Intent(context, MainActivity::class.java).apply {
         putExtra("userId", userId)
         putExtra("userPw", userPw)
         putExtra("userName", userName)
         putExtra("userDescription", userDescription)
     }
-    context.startActivity(intent)
     Toast.makeText(context, "로그인 성공!", Toast.LENGTH_SHORT).show()
 }
 
@@ -142,6 +187,6 @@ private fun moveToMain(context: Context, userId: String, userPw: String, userNam
 @Composable
 fun LoginPreview() {
     NOWSOPTAndroidTheme {
-        LoginCompose("","","","")
+        LoginView("","","","")
     }
 }
