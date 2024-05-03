@@ -6,12 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -19,14 +14,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,120 +48,98 @@ fun SignUpCompose(){
     var userId by remember { mutableStateOf("") }
     var userPw by remember { mutableStateOf("") }
     var userName by remember { mutableStateOf("") }
-    var userMbti by remember { mutableStateOf("") }
+    var userDescription by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 30.dp),
+            .padding(horizontal = 30.dp, vertical = 60.dp),
     ) {
-        Spacer(modifier = Modifier.height(60.dp))
         Text(
-            text = "Sign Up",
+            text = stringResource(id = R.string.title_sign_up),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(60.dp))
-        Text(
-            text = "ID",
-            fontSize = 20.sp,
-            textAlign = TextAlign.Start
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        TextField(
-            value = userId,
-            onValueChange = { userId = it },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("아이디를 입력하세요.") },
-            singleLine = true //단일 줄로 제한
-        )
+        TextFieldWithLabel(
+            stringResource(id = R.string.tv_id), userId,
+            stringResource(id = R.string.hint_id)
+        ) { userId = it }
         Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = "비밀번호",
-            fontSize = 20.sp,
-            textAlign = TextAlign.Start
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        TextField(
-            value = userPw,
-            onValueChange = { userPw = it },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("비밀번호를 입력하세요.") },
-            singleLine = true
-        )
-        Spacer(modifier = Modifier.height(10.dp))
+        TextFieldWithLabel(
+            stringResource(id = R.string.tv_pw), userPw,
+            stringResource(id = R.string.hint_pw)
+        ) { userPw = it }
         Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = "닉네임",
-            fontSize = 20.sp,
-            textAlign = TextAlign.Start
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        TextField(
-            value = userName,
-            onValueChange = { userName = it },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("닉네임을 입력하세요.") },
-            singleLine = true
-        )
+        TextFieldWithLabel(
+            stringResource(id = R.string.tv_user_name), userName,
+            stringResource(id = R.string.hint_user_name)
+        ) { userName = it }
         Spacer(modifier = Modifier.height(30.dp))
-        Text(
-            text = "MBTI",
-            fontSize = 20.sp,
-            textAlign = TextAlign.Start
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        TextField(
-            value = userMbti,
-            onValueChange = { userMbti = it },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text("MBTI를 입력하세요.") },
-            singleLine = true
-        )
+        TextFieldWithLabel(
+            stringResource(id = R.string.tv_user_description), userDescription,
+            stringResource(id = R.string.hint_user_description)
+        ) { userDescription = it }
         Spacer(modifier = Modifier.weight(2f))
         Button(
             onClick = {
-                checkSignUp(context, userId, userPw, userName, userMbti)
+                checkSignUp(context, userId, userPw, userName, userDescription)
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
             shape = RoundedCornerShape(50.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("회원가입", color = Color.White)
+            Text(stringResource(id = R.string.btn_sign_up), color = Color.White)
         }
-        Spacer(modifier = Modifier.padding(bottom = 60.dp))
+    }
+}
+
+@Composable
+fun TextFieldWithLabel(label: String, value: String, hint: String, onValueChange: (String) -> Unit) {
+    Column {
+        Text(
+            text = label,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Start
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(hint) },
+            singleLine = true
+        )
     }
 }
 
 // 회원 가입 가능 여부 체크
-fun checkSignUp(context: Context, userId: String, userPw: String, userName: String, userMbti: String) {
+fun checkSignUp(context: Context, userId: String, userPw: String, userName: String, userDescription: String) {
     val isValidId = userId.length in 6..10
     val isValidPw = userPw.length in 8..12
     val isValidName = userName.trim().isEmpty() // 공백으로만 이루어진 경우 판단
-    val isEmpty = userId.isEmpty() || userPw.isEmpty() || userName.isEmpty() || userMbti.isEmpty()
 
     val message = when {
-        !isValidId -> "ID는 6~10 글자여야 합니다."
-        !isValidPw -> "Password는 8~12 글자여야 합니다."
-        isValidName -> "공백으로만 이루어진 닉네임은 불가합니다."
-        isEmpty -> "모든 정보를 입력해주세요."
+        !isValidId -> context.getString(R.string.error_invalid_id)
+        !isValidPw -> context.getString(R.string.error_invalid_pw)
+        isValidName -> context.getString(R.string.error_empty_name)
         else -> {
-            moveToLogin(context, userId, userPw, userName, userMbti)
-            "회원가입 성공!"
+            moveToLogin(context, userId, userPw, userName, userDescription)
+            context.getString(R.string.signup_success)
         }
     }
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
-// 로그인 페이지로 이동
-private fun moveToLogin(context: Context, userId: String, userPw: String, userName: String, userMbti: String) {
+// Move to login page
+private fun moveToLogin(context: Context, userId: String, userPw: String, userName: String, userDescription: String) {
     val intent = Intent(context, LoginActivity::class.java).apply {
         putExtra("userId", userId)
         putExtra("userPw", userPw)
         putExtra("userName", userName)
-        putExtra("userMbti", userMbti)
+        putExtra("userDescription", userDescription)
     }
     context.startActivity(intent)
 }
