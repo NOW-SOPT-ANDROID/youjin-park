@@ -5,7 +5,7 @@ import androidx.annotation.DrawableRes
 data class Friend(
     @DrawableRes val profileImage: Int,
     val name: String,
-    val selfDescription: String,
+    val phone: String,
 ) {
     companion object {
         const val TYPE_USER = 0

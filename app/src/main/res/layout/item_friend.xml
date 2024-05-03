@@ -28,10 +28,10 @@
         app:layout_constraintTop_toTopOf="@id/iv_friend_profile" />
 
     <TextView
-        android:id="@+id/tv_friend_description"
+        android:id="@+id/tv_friend_phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/tv_user_description"
+        android:text="@string/tv_user_phone"
         android:textAlignment="textEnd"
         android:maxLines="1"
         android:ellipsize="end"

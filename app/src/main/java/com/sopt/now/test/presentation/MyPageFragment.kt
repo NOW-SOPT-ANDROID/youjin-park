@@ -35,10 +35,9 @@ class MyPageFragment : Fragment() {
         val userData = userPreference.getUserData()
         if (userData != null) {
             with(binding) {
-                tvMyName.text = userData.userName
-                tvMyDescription.text = userData.selfDescription
                 tvMyId.text = userData.userId
-                tvMyPw.text = userData.userPw
+                tvMyName.text = userData.userName
+                tvMyPhone.text = userData.userPhone
             }
         }
     }

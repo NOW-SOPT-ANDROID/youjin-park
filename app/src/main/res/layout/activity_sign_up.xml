@@ -83,16 +83,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/tv_user_description"
+        android:text="@string/tv_user_phone"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_sign_up_name"/>
 
     <EditText
-        android:id="@+id/et_sign_up_description"
+        android:id="@+id/et_sign_up_phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_user_description"
+        android:hint="@string/hint_user_phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_sign_up_description"/>

@@ -9,9 +9,8 @@ class UserPreference(context: Context) {
     fun saveUserData(userData: UserData) {
         with(sharedPreferences.edit()){
             putString("userId", userData.userId)
-            putString("userPw", userData.userPw)
             putString("userName", userData.userName)
-            putString("selfDescription", userData.selfDescription)
+            putString("userPhone", userData.userPhone)
             apply()
         }
     }
@@ -20,12 +19,11 @@ class UserPreference(context: Context) {
     fun getUserData(): UserData? {
         with(sharedPreferences){
             val userId = getString("userId", null)
-            val userPw = getString("userPw", null)
             val userName = getString("userName", null)
-            val selfDescription = getString("selfDescription", null)
+            val userPhone = getString("userPhone", null)
 
-            return if (userId != null && userPw != null && userName != null && selfDescription != null) {
-                UserData(userId, userPw, userName, selfDescription)
+            return if (userId != null && userName != null && userPhone != null) {
+                UserData(userId, userName, userPhone)
             } else {
                 null
             }

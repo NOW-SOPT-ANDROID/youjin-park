@@ -11,6 +11,6 @@
     <string name="title_sign_up">SIGN UP</string>
     <string name="tv_user_name">닉네임</string>
     <string name="hint_user_name">닉네임을 입력해주세요.</string>
-    <string name="tv_user_description">한 줄 소개</string>
-    <string name="hint_user_description">한 줄 소개를 입력해주세요.</string>
+    <string name="tv_user_phone">핸드폰 번호</string>
+    <string name="hint_user_phone">핸드폰 번호를 입력해주세요.</string>
 </resources>

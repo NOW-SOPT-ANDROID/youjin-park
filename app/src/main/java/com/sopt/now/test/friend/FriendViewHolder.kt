@@ -13,7 +13,7 @@ class FriendViewHolder(private val binding: ItemFriendBinding) : BaseViewHolder(
         binding.run {
             ivFriendProfile.setImageResource(friendData.profileImage)
             tvFriendName.text = friendData.name
-            tvFriendDescription.text = friendData.selfDescription
+            tvFriendPhone.text = friendData.phone
         }
     }
 }
@@ -23,7 +23,7 @@ class UserViewHolder(private val binding: ItemUserBinding) : BaseViewHolder(bind
         binding.run {
             ivMyProfile.setImageResource(userData.profileImage)
             tvMyName.text = userData.name
-            tvMyDescription.text = userData.selfDescription
+            tvMyPhone.text = userData.phone
         }
     }
 }

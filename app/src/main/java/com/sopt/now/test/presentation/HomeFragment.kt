@@ -47,7 +47,7 @@ class HomeFragment: Fragment() {
             val newFriend = Friend(
                 profileImage = R.drawable.iv_user_profile,
                 name = it.userName,
-                selfDescription = it.selfDescription
+                phone = it.userPhone
             )
             viewModel.mockFriendList.add(0, newFriend)
         }
