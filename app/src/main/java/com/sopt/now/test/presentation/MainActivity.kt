@@ -1,12 +1,10 @@
-package com.sopt.now
+package com.sopt.now.test.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.sopt.now.R
 import com.sopt.now.databinding.ActivityMainBinding
-import com.sopt.now.test.HomeFragment
-import com.sopt.now.test.MyPageFragment
-import com.sopt.now.test.SearchFragment
 
 class MainActivity : AppCompatActivity() {
 

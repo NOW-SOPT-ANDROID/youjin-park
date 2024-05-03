@@ -1,4 +1,4 @@
-package com.sopt.now
+package com.sopt.now.test.presentation
 
 import android.content.Intent
 import android.os.Bundle

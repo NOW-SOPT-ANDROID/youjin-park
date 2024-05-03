@@ -1,4 +1,4 @@
-package com.sopt.now.test.data
+package com.sopt.now.test.presentation
 
 import androidx.lifecycle.ViewModel
 import com.sopt.now.R

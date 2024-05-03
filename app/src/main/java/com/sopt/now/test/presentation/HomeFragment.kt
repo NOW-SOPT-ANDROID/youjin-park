@@ -1,4 +1,4 @@
-package com.sopt.now.test
+package com.sopt.now.test.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sopt.now.R
 import com.sopt.now.databinding.FragmentHomeBinding
 import com.sopt.now.test.data.Friend
-import com.sopt.now.test.data.HomeViewModel
 import com.sopt.now.test.data.UserPreference
 import com.sopt.now.test.friend.FriendAdapter
 

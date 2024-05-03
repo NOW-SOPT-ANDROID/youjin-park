@@ -1,4 +1,4 @@
-package com.sopt.now.test
+package com.sopt.now.test.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
