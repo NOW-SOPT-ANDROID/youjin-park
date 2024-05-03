@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sopt.now.R
 import com.sopt.now.databinding.FragmentHomeBinding
 import com.sopt.now.test.data.Friend
-import com.sopt.now.test.data.UserPreference
 import com.sopt.now.test.friend.FriendAdapter
 
 class HomeFragment: Fragment() {
@@ -19,7 +18,7 @@ class HomeFragment: Fragment() {
         get() = requireNotNull(_binding) { "바인딩 객체 좀 생성해주세요 제발!!" }
 
     private val viewModel by viewModels<HomeViewModel>()
-    private lateinit var userPreference: UserPreference
+    private val userInfoViewModel by viewModels<UserInfoViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,23 +32,24 @@ class HomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext())
 
         setFriendList()
-        setRecyclerView()
     }
 
     // 리스트에 사용자 정보 추가
-    private fun setFriendList(){
-        val userData = userPreference.getUserData()
+    private fun setFriendList() {
+        userInfoViewModel.userInfo()
 
-        userData?.let {
-            val newFriend = Friend(
-                profileImage = R.drawable.iv_user_profile,
-                name = it.userName,
-                phone = it.userPhone
-            )
-            viewModel.mockFriendList.add(0, newFriend)
+        userInfoViewModel.userInfoLiveData.observe(requireActivity()) { userData ->
+            userData?.let {
+                val newFriend = Friend(
+                    profileImage = R.drawable.iv_user_profile,
+                    name = it.data.nickname,
+                    phone = it.data.phone
+                )
+                viewModel.mockFriendList.add(0, newFriend)
+                setRecyclerView()
+            }
         }
     }
 
