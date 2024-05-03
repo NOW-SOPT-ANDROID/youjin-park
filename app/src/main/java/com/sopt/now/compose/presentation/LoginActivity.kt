@@ -1,4 +1,4 @@
-package com.sopt.now.compose
+package com.sopt.now.compose.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -32,9 +32,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.R
+import com.sopt.now.compose.data.ApiFactory
+import com.sopt.now.compose.data.UserPreference
+import com.sopt.now.compose.data.dto.request.RequestLoginDto
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class LoginActivity : ComponentActivity() {
+
+    private lateinit var userPreference: UserPreference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -43,12 +50,12 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val userId = intent.getStringExtra("userId").toString()
-                    val userPw = intent.getStringExtra("userPw").toString()
-                    val userName = intent.getStringExtra("userName").toString()
-                    val userDescription = intent.getStringExtra("userDescription").toString()
 
-                    LoginView(userId, userPw, userName ,userDescription)
+                    userPreference = UserPreference(this)
+                    ApiFactory.initializeUserPreference(userPreference)
+
+                    val viewModel: LoginViewModel = remember { LoginViewModel() }
+                    LoginView(viewModel)
                 }
             }
         }
@@ -57,14 +64,12 @@ class LoginActivity : ComponentActivity() {
 
 @Composable
 fun LoginView(
-    userId: String,
-    userPw: String,
-    userName: String,
-    userDescription: String
+    viewModel: LoginViewModel
 ) {
     val context = LocalContext.current
     var inputId by remember { mutableStateOf("") }
     var inputPw by remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier
@@ -94,7 +99,7 @@ fun LoginView(
         LoginButton(
             text = stringResource(id = R.string.btn_login),
             onClick = {
-                checkLogin(context, userId, userPw, userName, userDescription, inputId, inputPw)
+                checkLogin(context, viewModel, inputId, inputPw)
             }
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -155,31 +160,25 @@ fun LoginButton(text: String, onClick: () -> Unit) {
 
 private fun checkLogin(
     context: Context,
-    userId: String,
-    userPw: String,
-    userName: String,
-    userDescription: String,
+    viewModel: LoginViewModel,
     inputId: String,
     inputPw: String
 ) {
-    if (userId == inputId && userPw == inputPw) {
-        moveToMain(context, userId, userPw, userName, userDescription)
+    viewModel.login(RequestLoginDto(inputId, inputPw))
+
+    val userId = viewModel.userIdLiveData.value
+    if(userId != null){
+        ApiFactory.userPreference.saveUserId(userId)
+        moveToMain(context)
     }
 }
 
 private fun moveToMain(
     context: Context,
-    userId: String,
-    userPw: String,
-    userName: String,
-    userDescription: String
 ) {
-    Intent(context, MainActivity::class.java).apply {
-        putExtra("userId", userId)
-        putExtra("userPw", userPw)
-        putExtra("userName", userName)
-        putExtra("userDescription", userDescription)
-    }
+    val intent = Intent(context, MainActivity::class.java)
+    context.startActivity(intent)
+
     Toast.makeText(context, "로그인 성공!", Toast.LENGTH_SHORT).show()
 }
 
@@ -187,6 +186,6 @@ private fun moveToMain(
 @Composable
 fun LoginPreview() {
     NOWSOPTAndroidTheme {
-        LoginView("","","","")
+        LoginView(viewModel = LoginViewModel())
     }
 }
