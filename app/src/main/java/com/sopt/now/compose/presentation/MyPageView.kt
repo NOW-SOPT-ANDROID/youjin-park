@@ -1,5 +1,6 @@
-package com.sopt.now.compose
+package com.sopt.now.compose.presentation
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +15,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.R
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 @Composable
-fun MyPageView(userId: String, userPw: String, userName: String, userDescription: String) {
+fun MyPageView(userId: String, userPw: String, userPhone: String) {
+    Log.d("myPage", "${userId}")
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,7 +38,7 @@ fun MyPageView(userId: String, userPw: String, userName: String, userDescription
             )
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = userName,
+                text = userPhone,
                 fontSize = 20.sp
             )
         }
@@ -52,10 +55,11 @@ fun MyPageView(userId: String, userPw: String, userName: String, userDescription
         Spacer(modifier = Modifier.height(30.dp))
         UserInfoItem(
             label = stringResource(id = R.string.tv_user_description),
-            value = userDescription
+            value = userPhone
         )
     }
 }
+
 
 @Composable
 fun UserInfoItem(label: String, value: String) {
@@ -77,6 +81,6 @@ fun UserInfoItem(label: String, value: String) {
 @Composable
 fun MyPagePreview() {
     NOWSOPTAndroidTheme {
-        MyPageView("myPageSopt", "mypagePassword123", "MyPageUserName", "INFJ 입니다!")
+        MyPageView("myPageSopt", "mypagePassword123", "MyPageUserName")
     }
 }

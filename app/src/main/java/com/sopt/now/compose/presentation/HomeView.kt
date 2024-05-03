@@ -1,4 +1,4 @@
-package com.sopt.now.compose
+package com.sopt.now.compose.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,16 +8,17 @@ import com.sopt.now.compose.item.FriendItem
 import com.sopt.now.compose.item.Profile
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.sopt.now.compose.R
 import com.sopt.now.compose.item.UserItem
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 @Composable
-fun HomeView() {
+fun HomeView(userName: String, userPhone: String) {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
         item {
-            UserItem(friendList.first())
+            UserItem(Profile(R.drawable.iv_user_profile, userName, userPhone))
         }
 
         // 첫 번째 요소는 건너뛰고 적용
@@ -101,6 +102,6 @@ val friendList = listOf(
 @Composable
 fun HomePreview() {
     NOWSOPTAndroidTheme {
-        HomeView()
+        HomeView("","")
     }
 }
