@@ -9,16 +9,18 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sopt.now.R
 import com.sopt.now.databinding.FragmentHomeBinding
-import com.sopt.now.test.data.Friend
+import com.sopt.now.test.data.Profile
 import com.sopt.now.test.friend.FriendAdapter
 
 class HomeFragment: Fragment() {
     private var _binding: FragmentHomeBinding? = null
+
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding) { "바인딩 객체 좀 생성해주세요 제발!!" }
 
-    private val viewModel by viewModels<HomeViewModel>()
-    private val userInfoViewModel by viewModels<UserInfoViewModel>()
+    private val friendViewModel by viewModels<HomeViewModel>()
+    private val userViewModel by viewModels<UserInfoViewModel>()
+    var userList = mutableListOf<Profile>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,22 +34,41 @@ class HomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        setFriendList()
+        setFriendProfile()
+        setUserProfile()
     }
 
-    // 리스트에 사용자 정보 추가
-    private fun setFriendList() {
-        userInfoViewModel.userInfo()
+    // 사용자 프로필 설정
+    private fun setUserProfile() {
+        userViewModel.userInfo()
 
-        userInfoViewModel.userInfoLiveData.observe(requireActivity()) { userData ->
-            userData?.let {
-                val newFriend = Friend(
-                    profileImage = R.drawable.iv_user_profile,
-                    name = it.data.nickname,
-                    phone = it.data.phone
+        userViewModel.userInfoLiveData.observe(requireActivity()) { userInfo ->
+            userInfo?.let {
+                val userProfile = Profile(
+                    userImage = R.drawable.iv_user_profile.toString(),
+                    userName = userInfo.data.nickname,
+                    userInfo = userInfo.data.phone,
                 )
-                viewModel.mockFriendList.add(0, newFriend)
+                userList.add(0, userProfile)
+                setRecyclerView()
+            }
+        }
+    }
+
+    // 친구 프로필 설정
+    private fun setFriendProfile() {
+        friendViewModel.getFriendInfo(0)
+
+        friendViewModel.friendInfoLiveData.observe(requireActivity()) { friendInfo ->
+            friendInfo?.let {
+                friendInfo.data.forEach { friendData ->
+                    val friend = Profile(
+                        userImage = friendData.avatar,
+                        userName = friendData.firstName,
+                        userInfo = friendData.email
+                    )
+                    userList.add(friend)
+                }
                 setRecyclerView()
             }
         }
@@ -55,7 +76,7 @@ class HomeFragment: Fragment() {
 
     // FriendAdapter 연결
     private fun setRecyclerView(){
-        val friendAdapter = FriendAdapter(viewModel.mockFriendList)
+        val friendAdapter = FriendAdapter(userList)
         binding.rvFriends.run {
             layoutManager = LinearLayoutManager(requireContext())
             setAdapter(friendAdapter)
