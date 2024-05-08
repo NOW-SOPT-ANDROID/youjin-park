@@ -11,7 +11,8 @@ import retrofit2.Retrofit
 import java.io.IOException
 
 object ApiFactory {
-    private const val BASE_URL: String = BuildConfig.AUTH_BASE_URL
+    private const val AUTH_BASE_URL: String = BuildConfig.AUTH_BASE_URL
+    private const val FRIEND_BASE_URL: String = BuildConfig.FRIEND_BASE_URL
     private lateinit var userPreference: UserPreference // UserPreference 추가
 
     // UserPreference 초기화
@@ -19,10 +20,17 @@ object ApiFactory {
         this.userPreference = userPreference
     }
 
-    val retrofit: Retrofit by lazy {
+    val authRetrofit: Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(AUTH_BASE_URL)
             .client(provideOkHttpClient(HeaderInterceptor()))
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .build()
+    }
+
+    val friendRetrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(FRIEND_BASE_URL)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
@@ -43,10 +51,12 @@ object ApiFactory {
         }
     }
 
-    inline fun <reified T> create(): T = retrofit.create(T::class.java)
+    inline fun <reified T> authCreate(): T = authRetrofit.create(T::class.java)
+    inline fun <reified T> friendCreate(): T = friendRetrofit.create(T::class.java)
 }
 
 object ServicePool {
-    val authService = ApiFactory.create<AuthService>()
-    val userService = ApiFactory.create<UserService>()
+    val authService = ApiFactory.authCreate<AuthService>()
+    val userService = ApiFactory.authCreate<UserService>()
+    val friendService = ApiFactory.friendCreate<FriendService>()
 }
