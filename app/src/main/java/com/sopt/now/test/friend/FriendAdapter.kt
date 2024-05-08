@@ -5,20 +5,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sopt.now.databinding.ItemFriendBinding
 import com.sopt.now.databinding.ItemUserBinding
-import com.sopt.now.test.data.Friend
+import com.sopt.now.test.data.Profile
 
-class FriendAdapter(private val profiles: List<Friend>) : RecyclerView.Adapter<BaseViewHolder>() {
+class FriendAdapter(private val profiles: List<Profile>) : RecyclerView.Adapter<BaseViewHolder>() {
 
     // 첫 번째 아이템
     private val FIRST_ITEM_POSITION = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         return when (viewType) {
-            Friend.TYPE_USER -> {
+            TYPE_USER -> {
                 val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 UserViewHolder(binding)
             }
-            Friend.TYPE_FRIEND -> {
+            TYPE_FRIEND -> {
                 val binding = ItemFriendBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FriendViewHolder(binding)
             }
@@ -30,10 +30,10 @@ class FriendAdapter(private val profiles: List<Friend>) : RecyclerView.Adapter<B
         val profile = profiles[position]
 
         when (holder) {
-            is FriendViewHolder -> {
+            is UserViewHolder -> {
                 holder.onBind(profile)
             }
-            is UserViewHolder -> {
+            is FriendViewHolder -> {
                 holder.onBind(profile)
             }
         }
@@ -41,10 +41,14 @@ class FriendAdapter(private val profiles: List<Friend>) : RecyclerView.Adapter<B
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            FIRST_ITEM_POSITION -> Friend.TYPE_USER
-            else -> Friend.TYPE_FRIEND
+            FIRST_ITEM_POSITION -> TYPE_USER
+            else -> TYPE_FRIEND
         }
     }
-
     override fun getItemCount(): Int = profiles.size
+
+    companion object {
+        const val TYPE_USER = 0
+        const val TYPE_FRIEND = 1
+    }
 }
