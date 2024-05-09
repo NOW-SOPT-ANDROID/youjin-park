@@ -31,7 +31,10 @@ class LoginActivity : AppCompatActivity() {
     // 로그인
     private fun setupLoginButton() {
         binding.btnLogin.setOnClickListener {
-            viewModel.login(getLoginRequestDto())
+            viewModel.login(RequestLoginDto(
+                authenticationId = binding.etLoginId.text.toString(),
+                password = binding.etLoginPw.text.toString()
+            ))
         }
     }
 
@@ -47,15 +50,6 @@ class LoginActivity : AppCompatActivity() {
         viewModel.liveData.observe(this) { response ->
             showToast(response.message)
         }
-    }
-
-    private fun getLoginRequestDto(): RequestLoginDto {
-        val id = binding.etLoginId.text.toString()
-        val password = binding.etLoginPw.text.toString()
-        return RequestLoginDto(
-            authenticationId = id,
-            password = password
-        )
     }
 
     // 메인 페이지로 이동
