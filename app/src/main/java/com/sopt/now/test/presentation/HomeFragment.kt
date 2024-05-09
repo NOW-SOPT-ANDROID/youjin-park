@@ -78,7 +78,6 @@ class HomeFragment: Fragment() {
     private fun setRecyclerView(){
         val friendAdapter = FriendAdapter(userList)
         binding.rvFriends.run {
-            layoutManager = LinearLayoutManager(requireContext())
             setAdapter(friendAdapter)
         }
     }

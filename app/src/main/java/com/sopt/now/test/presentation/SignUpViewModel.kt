@@ -1,6 +1,5 @@
 package com.sopt.now.test.presentation
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
@@ -23,13 +22,11 @@ class SignUpViewModel : ViewModel() {
                 response: Response<ResponseAuthDto>,
             ) {
                 if (response.isSuccessful) {
-                    val data: ResponseAuthDto? = response.body()
                     val userId = response.headers()["location"]
                     liveData.value = BaseState(
                         isSuccess = true,
                         message = "회원가입 성공 유저의 ID는 $userId 입니다."
                     )
-                    Log.d("SignUp", "data: $data, userId: $userId")
                 } else {
                     val error = response.errorBody()?.string()
                     val gson = Gson()

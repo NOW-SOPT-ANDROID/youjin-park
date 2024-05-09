@@ -27,17 +27,17 @@ class MainActivity : AppCompatActivity() {
     private fun clickBottomNavigation() {
         binding.bnvHome.setOnItemSelectedListener{
             when (it.itemId) {
-                R.id.menu_home-> {
+                R.id.menu_home -> {
                     replaceFragment(HomeFragment())
                     true
                 }
 
-                R.id.menu_search-> {
+                R.id.menu_search -> {
                     replaceFragment(SearchFragment())
                     true
                 }
 
-                R.id.menu_mypage-> {
+                R.id.menu_mypage -> {
                     replaceFragment(MyPageFragment())
                     true
                 }
