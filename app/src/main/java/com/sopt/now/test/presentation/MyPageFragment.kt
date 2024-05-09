@@ -35,9 +35,6 @@ class MyPageFragment : Fragment() {
     }
 
     private fun initObserver() {
-
-        viewModel.userInfo()
-
         viewModel.userInfoLiveData.observe(requireActivity()) { userData ->
             Log.d("userPreference before", "${userPreference.getUserData()}")
             userData?.let {

@@ -17,6 +17,10 @@ class UserInfoViewModel : ViewModel() {
     val liveData = MutableLiveData<BaseState>()
     val userInfoLiveData = MutableLiveData<ResponseUserInfoDto?>()
 
+    init{
+        userInfo()
+    }
+
     fun userInfo() {
         userService.userInfo().enqueue(object : Callback<ResponseUserInfoDto> {
             override fun onResponse(
@@ -32,7 +36,6 @@ class UserInfoViewModel : ViewModel() {
                         isSuccess = true,
                         message = response.message()
                     )
-                    Log.d("UserInfo", "data: $data, userId: $userId")
                 } else {
                     val error = response.errorBody()?.string()
                     val gson = Gson()
