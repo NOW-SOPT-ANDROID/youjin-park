@@ -38,10 +38,9 @@ class UserPreference(context: Context) {
             val userName = getString("userName", null)
             val userPhone = getString("userPhone", null)
 
-            return if (userId != null && userName != null && userPhone != null) {
-                UserData(userId, userName, userPhone)
-            } else {
-                null
+            // takeIf 사용
+            return userId?.takeIf { userName != null && userPhone != null }?.let {
+                UserData(userId, userName!!, userPhone!!)
             }
         }
     }
