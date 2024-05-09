@@ -9,9 +9,6 @@ import com.sopt.now.test.data.Profile
 
 class FriendAdapter(private val profiles: List<Profile>) : RecyclerView.Adapter<BaseViewHolder>() {
 
-    // 첫 번째 아이템
-    private val FIRST_ITEM_POSITION = 0
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         return when (viewType) {
             TYPE_USER -> {
@@ -50,5 +47,6 @@ class FriendAdapter(private val profiles: List<Profile>) : RecyclerView.Adapter<
     companion object {
         const val TYPE_USER = 0
         const val TYPE_FRIEND = 1
+        const val FIRST_ITEM_POSITION = 0
     }
 }
