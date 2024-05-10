@@ -1,10 +1,13 @@
 package com.sopt.now.test.presentation
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.sopt.now.test.data.ApiFactory
 import com.sopt.now.test.data.ServicePool
 import com.sopt.now.test.data.BaseState
+import com.sopt.now.test.data.UserPreference
 import com.sopt.now.test.data.dto.request.RequestLoginDto
 import com.sopt.now.test.data.dto.response.ResponseAuthDto
 import retrofit2.Call
@@ -14,7 +17,7 @@ import retrofit2.Response
 class LoginViewModel : ViewModel() {
     private val authService by lazy { ServicePool.authService }
     val liveData = MutableLiveData<BaseState>()
-    val userIdLiveData = MutableLiveData<String?>()
+    private lateinit var userPreference: UserPreference
 
     fun login(request: RequestLoginDto) {
         authService.login(request).enqueue(object : Callback<ResponseAuthDto> {
@@ -25,7 +28,9 @@ class LoginViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val data: ResponseAuthDto? = response.body()
                     val userId = response.headers()["location"]
-                    userIdLiveData.value = userId
+                    if (userId != null) {
+                        userPreference.saveUserId(userId)
+                    }
                     liveData.value = BaseState(
                         isSuccess = true,
                         message = "로그인 성공! 유저의 ID는 $userId 입니다."
@@ -47,5 +52,11 @@ class LoginViewModel : ViewModel() {
                 )
             }
         })
+    }
+
+    // 초기화
+    fun initializeApiFactory(context: Context) {
+        userPreference = UserPreference(context)
+        ApiFactory.initializeUserPreference(userPreference)
     }
 }

@@ -14,14 +14,12 @@ class LoginActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
     private val viewModel by viewModels<LoginViewModel>()
-    private lateinit var userPreference: UserPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        userPreference = UserPreference(this)
-        ApiFactory.initializeUserPreference(userPreference)
+        viewModel.initializeApiFactory(this)
 
         initObserver()
         setupLoginButton()
@@ -39,15 +37,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initObserver() {
-        // 사용자 데이터 저장
-        viewModel.userIdLiveData.observe(this) { userId ->
-            userId?.let {
-                userPreference.saveUserId(userId)
+        viewModel.liveData.observe(this) { response ->
+            if(response.isSuccess){
                 moveToMain()
             }
-        }
-
-        viewModel.liveData.observe(this) { response ->
             showToast(response.message)
         }
     }
