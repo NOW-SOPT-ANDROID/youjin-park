@@ -20,7 +20,7 @@ class LoginViewModel : ViewModel() {
     private lateinit var userPreference: UserPreference
 
     fun login(request: RequestLoginDto) {
-        authService.login(request).enqueue(object : Callback<ResponseAuthDto> {
+        authService.postLogin(request).enqueue(object : Callback<ResponseAuthDto> {
             override fun onResponse(
                 call: Call<ResponseAuthDto>,
                 response: Response<ResponseAuthDto>,

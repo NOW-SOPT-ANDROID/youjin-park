@@ -9,12 +9,12 @@ import retrofit2.http.POST
 
 interface AuthService {
     @POST("member/join")
-    fun signUp(
+    fun postSignUp(
         @Body request: RequestSignUpDto,
     ): Call<ResponseAuthDto>
 
     @POST("member/login")
-    fun login(
+    fun postLogin(
         @Body request: RequestLoginDto,
     ): Call<ResponseAuthDto>
 }

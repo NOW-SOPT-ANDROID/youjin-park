@@ -6,8 +6,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.sopt.now.databinding.ActivityLoginBinding
-import com.sopt.now.test.data.ApiFactory
-import com.sopt.now.test.data.UserPreference
 import com.sopt.now.test.data.dto.request.RequestLoginDto
 
 class LoginActivity : AppCompatActivity() {

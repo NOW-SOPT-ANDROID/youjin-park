@@ -18,7 +18,7 @@ class HomeViewModel() : ViewModel() {
     val friendInfoLiveData = MutableLiveData<ResponseFriendDto?>()
 
     fun getFriendInfo(page: Int) {
-        friendService.friendInfo(page).enqueue(object : Callback<ResponseFriendDto> {
+        friendService.getFriendInfo(page).enqueue(object : Callback<ResponseFriendDto> {
             override fun onResponse(
                 call: Call<ResponseFriendDto>,
                 response: Response<ResponseFriendDto>,

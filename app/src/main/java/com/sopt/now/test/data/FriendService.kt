@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface FriendService {
     @GET("users")
-    fun friendInfo(
+    fun getFriendInfo(
         @Query("page") page: Int,
     ): Call<ResponseFriendDto>
 }

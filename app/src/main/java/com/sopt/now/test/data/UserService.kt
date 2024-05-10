@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface UserService {
     @GET("member/info")
-    fun userInfo(
+    fun getUserInfo(
     ): Call<ResponseUserInfoDto>
 }

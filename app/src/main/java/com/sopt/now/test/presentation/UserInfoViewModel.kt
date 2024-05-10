@@ -22,14 +22,13 @@ class UserInfoViewModel : ViewModel() {
     }
 
     fun userInfo() {
-        userService.userInfo().enqueue(object : Callback<ResponseUserInfoDto> {
+        userService.getUserInfo().enqueue(object : Callback<ResponseUserInfoDto> {
             override fun onResponse(
                 call: Call<ResponseUserInfoDto>,
                 response: Response<ResponseUserInfoDto>,
             ) {
                 if (response.isSuccessful) {
                     val data: ResponseUserInfoDto? = response.body()
-                    val userId = response.headers()["location"]
                     userInfoLiveData.value = data
 
                     liveData.value = BaseState(
