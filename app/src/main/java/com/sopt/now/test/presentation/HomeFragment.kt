@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.sopt.now.R
 import com.sopt.now.databinding.FragmentHomeBinding
 import com.sopt.now.test.data.Profile
@@ -76,9 +76,13 @@ class HomeFragment: Fragment() {
 
     // FriendAdapter 연결
     private fun setRecyclerView(){
-        val friendAdapter = FriendAdapter(userList)
-        binding.rvFriends.run {
-            setAdapter(friendAdapter)
+        try {
+            val friendAdapter = FriendAdapter(userList)
+            binding.rvFriends.run {
+                setAdapter(friendAdapter)
+            }
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
