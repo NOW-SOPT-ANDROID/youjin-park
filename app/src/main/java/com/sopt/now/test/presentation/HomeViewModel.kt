@@ -17,8 +17,12 @@ class HomeViewModel() : ViewModel() {
     val liveData = MutableLiveData<BaseState>()
     val friendInfoLiveData = MutableLiveData<ResponseFriendDto?>()
 
-    fun getFriendInfo(page: Int) {
-        friendService.getFriendInfo(page).enqueue(object : Callback<ResponseFriendDto> {
+    init{
+        friendInfo()
+    }
+
+    private fun friendInfo() {
+        friendService.getFriendInfo(0).enqueue(object : Callback<ResponseFriendDto> {
             override fun onResponse(
                 call: Call<ResponseFriendDto>,
                 response: Response<ResponseFriendDto>,
@@ -30,9 +34,7 @@ class HomeViewModel() : ViewModel() {
                         isSuccess = true,
                         message = response.message()
                     )
-                    Log.d("HomeViewModel", "Response: $data")
                 } else {
-                    Log.e("HomeViewModel", "Failed to get friend info: ${response.code()}")
                     val error = response.errorBody()?.string()
                     val gson = Gson()
                     try {

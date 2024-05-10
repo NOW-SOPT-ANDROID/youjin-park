@@ -40,8 +40,6 @@ class HomeFragment: Fragment() {
 
     // 사용자 프로필 설정
     private fun setUserProfile() {
-        userViewModel.userInfo()
-
         userViewModel.userInfoLiveData.observe(requireActivity()) { userInfo ->
             userInfo?.let {
                 val userProfile = Profile(
@@ -50,15 +48,12 @@ class HomeFragment: Fragment() {
                     userInfo = userInfo.data.phone,
                 )
                 userList.add(0, userProfile)
-                setRecyclerView()
             }
         }
     }
 
     // 친구 프로필 설정
     private fun setFriendProfile() {
-        friendViewModel.getFriendInfo(0)
-
         friendViewModel.friendInfoLiveData.observe(requireActivity()) { friendInfo ->
             friendInfo?.let {
                 friendInfo.data.forEach { friendData ->
@@ -67,7 +62,7 @@ class HomeFragment: Fragment() {
                         userName = friendData.firstName,
                         userInfo = friendData.email
                     )
-                    userList.add(friend)
+                    userList.add(1, friend)
                 }
                 setRecyclerView()
             }

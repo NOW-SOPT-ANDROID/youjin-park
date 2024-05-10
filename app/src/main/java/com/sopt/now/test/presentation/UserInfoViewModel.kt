@@ -1,6 +1,5 @@
 package com.sopt.now.test.presentation
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
@@ -21,7 +20,7 @@ class UserInfoViewModel : ViewModel() {
         userInfo()
     }
 
-    fun userInfo() {
+    private fun userInfo() {
         userService.getUserInfo().enqueue(object : Callback<ResponseUserInfoDto> {
             override fun onResponse(
                 call: Call<ResponseUserInfoDto>,
