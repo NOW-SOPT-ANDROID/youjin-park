@@ -7,9 +7,9 @@ import com.sopt.now.databinding.ItemFriendBinding
 import com.sopt.now.databinding.ItemUserBinding
 import com.sopt.now.test.data.Profile
 
-class FriendAdapter(private val profiles: List<Profile>) : RecyclerView.Adapter<BaseViewHolder>() {
+class FriendAdapter(private val profiles: List<Profile>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_USER -> {
                 val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,7 +23,7 @@ class FriendAdapter(private val profiles: List<Profile>) : RecyclerView.Adapter<
         }
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val profile = profiles[position]
 
         when (holder) {

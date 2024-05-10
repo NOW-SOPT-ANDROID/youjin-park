@@ -1,16 +1,13 @@
 package com.sopt.now.test.friend
 
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import coil.api.load
 import com.sopt.now.R
 import com.sopt.now.databinding.ItemFriendBinding
 import com.sopt.now.databinding.ItemUserBinding
 import com.sopt.now.test.data.Profile
 
-sealed class BaseViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root)
-
-class FriendViewHolder(private val binding: ItemFriendBinding) : BaseViewHolder(binding) {
+class FriendViewHolder(private val binding: ItemFriendBinding) : RecyclerView.ViewHolder(binding.root) {
     fun onBind(friendData: Profile) {
         binding.run {
             ivFriendProfile.load(friendData.userImage)
@@ -20,7 +17,7 @@ class FriendViewHolder(private val binding: ItemFriendBinding) : BaseViewHolder(
     }
 }
 
-class UserViewHolder(private val binding: ItemUserBinding) : BaseViewHolder(binding) {
+class UserViewHolder(private val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root) {
     fun onBind(userData: Profile) {
         binding.run {
             ivMyProfile.load(R.drawable.iv_user_profile)
