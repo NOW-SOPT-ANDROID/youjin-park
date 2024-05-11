@@ -3,7 +3,7 @@ package com.sopt.now.compose.data
 import android.content.Context
 
 class UserPreference(context: Context) {
-    private val sharedPreferences = context.getSharedPreferences("userData", Context.MODE_PRIVATE)
+    private val sharedPreferences = context.applicationContext.getSharedPreferences("userData", Context.MODE_PRIVATE)
 
     // 사용자 아이디 저장
     fun saveUserId(userId: String) {
