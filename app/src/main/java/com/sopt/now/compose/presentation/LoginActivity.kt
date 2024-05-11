@@ -51,7 +51,7 @@ class LoginActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    userPreference = UserPreference(this)
+                    userPreference = UserPreference(LocalContext.current)
                     ApiFactory.initializeUserPreference(userPreference)
 
                     val viewModel: LoginViewModel = remember { LoginViewModel() }
