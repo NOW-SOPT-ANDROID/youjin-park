@@ -50,9 +50,10 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
                     userPreference = UserPreference(LocalContext.current)
-                    ApiFactory.initializeUserPreference(userPreference)
+                    if (!ApiFactory.isInitialized) {
+                        ApiFactory.initializeUserPreference(userPreference)
+                    }
 
                     val viewModel: LoginViewModel = remember { LoginViewModel() }
                     LoginView(viewModel)
