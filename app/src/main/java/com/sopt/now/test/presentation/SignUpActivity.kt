@@ -2,62 +2,65 @@ package com.sopt.now.test.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.sopt.now.databinding.ActivitySignUpBinding
+import com.sopt.now.test.core.util.context.showToast
+import com.sopt.now.test.core.view.UiState
 import com.sopt.now.test.data.dto.request.RequestSignUpDto
+import timber.log.Timber
 
 class SignUpActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivitySignUpBinding.inflate(layoutInflater) }
-    private val viewModel by viewModels<SignUpViewModel>()
+    private val signUpViewModel by viewModels<SignUpViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        initViews()
-        initObserver()
+        initSignUpBtnClickListener()
+        initPostSignUpObserver()
     }
 
-    private fun initViews() {
+    // 회원가입
+    private fun initSignUpBtnClickListener() {
         binding.btnSignUp.setOnClickListener {
-            viewModel.signUp(getSignUpRequestDto())
+            signUpViewModel.postSignUp(getSignUpRequestDto())
         }
     }
 
-    private fun initObserver() {
-        viewModel.liveData.observe(this) { response ->
-            if (response.isSuccess) {
-                moveToLogin()
+    private fun initPostSignUpObserver() {
+        signUpViewModel.postSignUpLiveData.observe(this) {
+            when (it) {
+                is UiState.Success -> navigateToLogin(it.data.message)
+                is UiState.Failure -> showToast(it.errorMessage)
+                is UiState.Loading -> Timber.d("로딩 중")
             }
-            showToast(response.message)
         }
     }
 
     private fun getSignUpRequestDto(): RequestSignUpDto {
-        val id = binding.etSignUpId.text.toString()
-        val password = binding.etSignUpPw.text.toString()
-        val nickname = binding.etSignUpName.text.toString()
-        val phoneNumber = binding.etSignUpPhone.text.toString()
-        return RequestSignUpDto(
-            authenticationId = id,
-            password = password,
-            nickname = nickname,
-            phone = phoneNumber
-        )
+        with(binding){
+            val id = etSignUpId.text.toString()
+            val password = etSignUpPw.text.toString()
+            val nickname = etSignUpName.text.toString()
+            val phoneNumber = etSignUpPhone.text.toString()
+            return RequestSignUpDto(
+                authenticationId = id,
+                password = password,
+                nickname = nickname,
+                phone = phoneNumber
+            )
+        }
     }
 
     // 로그인 페이지로 이동
-    private fun moveToLogin() {
+    private fun navigateToLogin(content: String) {
         Intent(this, LoginActivity::class.java).apply {
             startActivity(this)
             finish()
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        showToast(content)
     }
 }
