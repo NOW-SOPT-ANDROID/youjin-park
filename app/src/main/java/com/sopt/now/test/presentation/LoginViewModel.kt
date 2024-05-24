@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sopt.now.test.data.ApiFactory
-import com.sopt.now.test.data.ServicePool
 import com.sopt.now.test.data.BaseState
+import com.sopt.now.test.data.ServicePool
 import com.sopt.now.test.data.UserPreference
 import com.sopt.now.test.data.dto.request.RequestLoginDto
 import com.sopt.now.test.data.dto.response.ResponseAuthDto
@@ -16,10 +16,11 @@ import retrofit2.Response
 
 class LoginViewModel : ViewModel() {
     private val authService by lazy { ServicePool.authService }
-    val liveData = MutableLiveData<BaseState>()
+    private val _postLoginLiveData: MutableLiveData<BaseState> = MutableLiveData()
+    val postLoginLiveData: MutableLiveData<BaseState> = _postLoginLiveData
     private lateinit var userPreference: UserPreference
 
-    fun login(request: RequestLoginDto) {
+    fun postLogin(request: RequestLoginDto) {
         authService.postLogin(request).enqueue(object : Callback<ResponseAuthDto> {
             override fun onResponse(
                 call: Call<ResponseAuthDto>,
@@ -31,14 +32,14 @@ class LoginViewModel : ViewModel() {
                     if (userId != null) {
                         userPreference.saveUserId(userId)
                     }
-                    liveData.value = BaseState(
+                    _postLoginLiveData.value = BaseState(
                         isSuccess = true,
                         message = "로그인 성공! 유저의 ID는 $userId 입니다."
                     )
                     Log.d("Login", "data: $data, userId: $userId")
                 } else {
                     val error = response.message()
-                    liveData.value = BaseState(
+                    _postLoginLiveData.value = BaseState(
                         isSuccess = false,
                         message = "로그인 실패 $error"
                     )
@@ -46,7 +47,7 @@ class LoginViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<ResponseAuthDto>, t: Throwable) {
-                liveData.value = BaseState(
+                _postLoginLiveData.value = BaseState(
                     isSuccess = false,
                     message = "서버 에러"
                 )
