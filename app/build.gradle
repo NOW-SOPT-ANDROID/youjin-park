@@ -80,4 +80,7 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil:0.10.0")
+
+    // timber
+    implementation("com.jakewharton.timber:timber:4.7.1")
 }
