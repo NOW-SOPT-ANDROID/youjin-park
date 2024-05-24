@@ -7,18 +7,12 @@ class UserPreference(context: Context) {
 
     // 사용자 아이디 저장
     fun saveUserId(userId: String) {
-        with(sharedPreferences.edit()){
-            putString("userId", userId)
-            apply()
-        }
+        sharedPreferences.edit().putString("userId", userId).apply()
     }
 
     // 사용자 데이터 가져오기
     fun getUserId(): String? {
-        with(sharedPreferences){
-            val userId = getString("userId", null)
-            return userId
-        }
+        return sharedPreferences.getString("userId", null)
     }
 
     // 사용자 데이터 저장
