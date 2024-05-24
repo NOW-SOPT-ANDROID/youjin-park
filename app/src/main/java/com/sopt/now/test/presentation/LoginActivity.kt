@@ -2,66 +2,65 @@ package com.sopt.now.test.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.sopt.now.databinding.ActivityLoginBinding
+import com.sopt.now.test.core.util.context.showToast
 import com.sopt.now.test.data.dto.request.RequestLoginDto
 
 class LoginActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
-    private val viewModel by viewModels<LoginViewModel>()
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        viewModel.initializeApiFactory(this)
+        loginViewModel.initializeApiFactory(this)
 
-        initObserver()
-        setupLoginButton()
-        setupSignUpTextView()
+        initLoginBtnClickListener()
+        initPostLoginObserver()
+        initSignUpBtnClickListener()
     }
 
     // 로그인
-    private fun setupLoginButton() {
-        binding.btnLogin.setOnClickListener {
-            viewModel.login(RequestLoginDto(
-                authenticationId = binding.etLoginId.text.toString(),
-                password = binding.etLoginPw.text.toString()
-            ))
+    private fun initLoginBtnClickListener() {
+        with(binding){
+            btnLogin.setOnClickListener {
+                loginViewModel.postLogin(RequestLoginDto(
+                    authenticationId = etLoginId.text.toString(),
+                    password = etLoginPw.text.toString()
+                ))
+            }
         }
     }
 
-    private fun initObserver() {
-        viewModel.liveData.observe(this) { response ->
+    private fun initPostLoginObserver() {
+        loginViewModel.postLoginLiveData.observe(this) { response ->
             if(response.isSuccess){
-                moveToMain()
+                navigateToMain(response.message)
             }
             showToast(response.message)
         }
     }
 
     // 메인 페이지로 이동
-    private fun moveToMain() {
+    private fun navigateToMain(content: String) {
         Intent(this, MainActivity::class.java).apply {
             startActivity(this)
             finish()
         }
+        showToast(content)
     }
 
     // 회원가입 페이지로 이동
-    private fun setupSignUpTextView() {
+    private fun initSignUpBtnClickListener() {
         binding.tvSignUp.setOnClickListener {
             Intent(this, SignUpActivity::class.java).apply {
                 startActivity(this)
                 finish()
             }
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
