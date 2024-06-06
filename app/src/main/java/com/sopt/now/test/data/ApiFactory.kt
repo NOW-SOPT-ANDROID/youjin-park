@@ -13,7 +13,7 @@ import java.io.IOException
 object ApiFactory {
     private const val AUTH_BASE_URL: String = BuildConfig.AUTH_BASE_URL
     private const val FRIEND_BASE_URL: String = BuildConfig.FRIEND_BASE_URL
-    private lateinit var userPreference: UserPreference // UserPreference 추가
+    lateinit var userPreference: UserPreference // UserPreference 추가
 
     // UserPreference 초기화
     fun initializeUserPreference(userPreference: UserPreference) {
