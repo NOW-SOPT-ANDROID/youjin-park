@@ -1,12 +1,13 @@
-package com.sopt.now
+package com.sopt.now.test.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.sopt.now.R
 import com.sopt.now.databinding.ActivityMainBinding
-import com.sopt.now.test.HomeFragment
-import com.sopt.now.test.MyPageFragment
-import com.sopt.now.test.SearchFragment
+import com.sopt.now.test.presentation.home.HomeFragment
+import com.sopt.now.test.presentation.mypage.MyPageFragment
+import com.sopt.now.test.presentation.search.SearchFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val currentFragment = supportFragmentManager.findFragmentById(binding.fcvHome.id)
-        if (currentFragment == null){
+        if (currentFragment == null) {
             supportFragmentManager.beginTransaction()
                 .add(R.id.fcv_home, HomeFragment())
                 .commit()
@@ -27,22 +28,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun clickBottomNavigation() {
-        binding.bnvHome.setOnItemSelectedListener{
+        binding.bnvHome.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.menu_home-> {
+                R.id.menu_home -> {
                     replaceFragment(HomeFragment())
                     true
                 }
 
-                R.id.menu_search-> {
+                R.id.menu_search -> {
                     replaceFragment(SearchFragment())
                     true
                 }
 
-                R.id.menu_mypage-> {
+                R.id.menu_mypage -> {
                     replaceFragment(MyPageFragment())
                     true
                 }
+
                 else -> false
             }
         }

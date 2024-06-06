@@ -39,11 +39,11 @@
         app:layout_constraintTop_toTopOf="@id/cv_my_profile" />
 
     <TextView
-        android:id="@+id/tv_my_description"
+        android:id="@+id/tv_my_phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="@string/tv_user_description"
+        android:text="@string/tv_user_phone"
         android:textAlignment="textEnd"
         android:maxLines="1"
         android:ellipsize="end"
