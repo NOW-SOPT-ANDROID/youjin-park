@@ -1,4 +1,4 @@
-package com.sopt.now.test.presentation
+package com.sopt.now.test.presentation.signup
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
