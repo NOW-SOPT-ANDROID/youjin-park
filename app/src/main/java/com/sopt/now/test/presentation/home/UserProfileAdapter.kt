@@ -1,4 +1,4 @@
-package com.sopt.now.test.friend
+package com.sopt.now.test.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,19 +7,18 @@ import com.sopt.now.databinding.ItemFriendBinding
 import com.sopt.now.databinding.ItemUserBinding
 import com.sopt.now.test.data.Profile
 
-class FriendAdapter(private val profiles: List<Profile>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class UserProfileAdapter(private val profiles: List<Profile>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            TYPE_USER -> {
-                val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                UserViewHolder(binding)
-            }
-            TYPE_FRIEND -> {
-                val binding = ItemFriendBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FriendViewHolder(binding)
-            }
-            else -> throw IllegalArgumentException("Invalid view type")
+        return if (viewType == TYPE_USER) {
+            val binding =
+                ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            UserProfileViewHolder(binding)
+        } else {
+            val binding =
+                ItemFriendBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            FriendProfileViewHolder(binding)
         }
     }
 
@@ -27,21 +26,20 @@ class FriendAdapter(private val profiles: List<Profile>) : RecyclerView.Adapter<
         val profile = profiles[position]
 
         when (holder) {
-            is UserViewHolder -> {
+            is UserProfileViewHolder -> {
                 holder.onBind(profile)
             }
-            is FriendViewHolder -> {
+
+            is FriendProfileViewHolder -> {
                 holder.onBind(profile)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            FIRST_ITEM_POSITION -> TYPE_USER
-            else -> TYPE_FRIEND
-        }
+        return if (position == FIRST_ITEM_POSITION) TYPE_USER else TYPE_FRIEND
     }
+
     override fun getItemCount(): Int = profiles.size
 
     companion object {
