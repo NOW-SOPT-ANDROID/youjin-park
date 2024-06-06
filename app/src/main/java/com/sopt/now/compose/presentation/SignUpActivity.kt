@@ -1,4 +1,4 @@
-package com.sopt.now.compose
+package com.sopt.now.compose.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -24,6 +24,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sopt.now.compose.R
+import com.sopt.now.compose.data.ApiFactory
+import com.sopt.now.compose.data.ApiFactory.userPreference
+import com.sopt.now.compose.data.UserPreference
+import com.sopt.now.compose.data.dto.request.RequestSignUpDto
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class SignUpActivity : ComponentActivity() {
@@ -35,7 +40,11 @@ class SignUpActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SignUpCompose()
+                    userPreference = UserPreference(this)
+                    ApiFactory.initializeUserPreference(userPreference)
+
+                    val viewModel: SignUpViewModel = remember { SignUpViewModel() }
+                    SignUpCompose(viewModel)
                 }
             }
         }
@@ -43,7 +52,7 @@ class SignUpActivity : ComponentActivity() {
 }
 
 @Composable
-fun SignUpCompose(){
+fun SignUpCompose(viewModel: SignUpViewModel){
     val context = LocalContext.current
     var userId by remember { mutableStateOf("") }
     var userPw by remember { mutableStateOf("") }
@@ -85,7 +94,7 @@ fun SignUpCompose(){
         Spacer(modifier = Modifier.weight(2f))
         Button(
             onClick = {
-                checkSignUp(context, userId, userPw, userName, userDescription)
+                checkSignUp(viewModel, context, userId, userPw, userName, userDescription)
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
             shape = RoundedCornerShape(50.dp),
@@ -116,16 +125,21 @@ fun TextFieldWithLabel(label: String, value: String, hint: String, onValueChange
 }
 
 // 회원 가입 가능 여부 체크
-fun checkSignUp(context: Context, userId: String, userPw: String, userName: String, userDescription: String) {
-    val isValidId = userId.length in 6..10
+fun checkSignUp(
+    viewModel: SignUpViewModel,
+    context: Context,
+    userId: String,
+    userPw: String,
+    userName: String,
+    userDescription: String) {
     val isValidPw = userPw.length in 8..12
     val isValidName = userName.trim().isEmpty() // 공백으로만 이루어진 경우 판단
 
     val message = when {
-        !isValidId -> context.getString(R.string.error_invalid_id)
         !isValidPw -> context.getString(R.string.error_invalid_pw)
         isValidName -> context.getString(R.string.error_empty_name)
         else -> {
+            viewModel.signUp(RequestSignUpDto(userId, userPw, userName, userDescription))
             moveToLogin(context, userId, userPw, userName, userDescription)
             context.getString(R.string.signup_success)
         }
@@ -148,6 +162,6 @@ private fun moveToLogin(context: Context, userId: String, userPw: String, userNa
 @Composable
 fun SignUpPreview() {
     NOWSOPTAndroidTheme {
-        SignUpCompose()
+        SignUpCompose(viewModel = SignUpViewModel())
     }
 }
