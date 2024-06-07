@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">NOW SOPT Android</string>
+
+    <!--Login-->
     <string name="title_login">Welcom to SOPT</string>
     <string name="btn_sign_up">회원가입</string>
     <string name="btn_login">로그인</string>
@@ -8,9 +10,14 @@
     <string name="tv_pw">비밀번호</string>
     <string name="hint_pw">비밀번호를 입력해주세요.</string>
 
+    <!--SIGN UP-->
     <string name="title_sign_up">SIGN UP</string>
     <string name="tv_user_name">닉네임</string>
     <string name="hint_user_name">닉네임을 입력해주세요.</string>
-    <string name="tv_user_description">한 줄 소개</string>
-    <string name="hint_user_description">한 줄 소개를 입력해주세요.</string>
+    <string name="tv_user_phone">핸드폰 번호</string>
+    <string name="hint_user_phone">핸드폰 번호를 입력해주세요.</string>
+
+    <!--Message-->
+    <string name="message_loading">로딩 중</string>
+    <string name="message_login_success">로그인 성공! 유저의 ID는 %1$s 입니다.</string>
 </resources>

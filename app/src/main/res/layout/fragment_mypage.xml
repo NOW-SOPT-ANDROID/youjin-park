@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="30dp"
-    tools:context=".MainActivity">
+    tools:context=".test.presentation.MainActivity">
 
     <ImageView
         android:id="@+id/iv_my_profile"
@@ -30,10 +30,10 @@
         app:layout_constraintTop_toTopOf="@+id/iv_my_profile" />
 
     <TextView
-        android:id="@+id/tv_my_description"
+        android:id="@+id/tv_my_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tv_user_description"
+        android:text="@string/tv_user_phone"
         app:layout_constraintStart_toStartOf="@+id/tv_my_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_my_name"/>
 
@@ -55,23 +55,4 @@
         android:text="@string/tv_id"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_id"/>
-
-    <TextView
-        android:id="@+id/tv_pw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/tv_pw"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_my_id"/>
-
-    <TextView
-        android:id="@+id/tv_my_pw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/tv_pw"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_pw"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
