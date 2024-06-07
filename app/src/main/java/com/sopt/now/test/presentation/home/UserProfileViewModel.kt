@@ -4,12 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sopt.now.test.core.view.UiState
-import com.sopt.now.test.data.ServicePool
 import com.sopt.now.test.data.dto.response.ResponseFriendDto
 import com.sopt.now.test.data.dto.response.ResponseUserInfoDto
+import com.sopt.now.test.data.repository.UserProfileRepository
 import kotlinx.coroutines.launch
 
-class UserProfileViewModel : ViewModel() {
+class UserProfileViewModel(
+    private val userProfileRepository: UserProfileRepository
+) : ViewModel() {
     private val _getUserProfileLiveData = MutableLiveData<UiState<ResponseUserInfoDto>>()
     val getUserInfoProfileLiveData: MutableLiveData<UiState<ResponseUserInfoDto>> =
         _getUserProfileLiveData
@@ -23,27 +25,19 @@ class UserProfileViewModel : ViewModel() {
         getFriendProfile()
     }
 
-    // 사용자 프로필
+    // 사용자 프로필 가져오기
     private fun getUserProfile() {
         viewModelScope.launch {
-            runCatching {
-                ServicePool.userService.getUserInfo()
-            }.fold(
-                { _getUserProfileLiveData.value = UiState.Success(it) },
-                { _getUserProfileLiveData.value = UiState.Failure(it.message.toString()) }
-            )
+            val result = userProfileRepository.getUserProfile()
+            _getUserProfileLiveData.value = result
         }
     }
 
-    // 친구 프로필
+    // 친구 프로필 가져오기
     private fun getFriendProfile() {
         viewModelScope.launch {
-            runCatching {
-                ServicePool.friendService.getFriendInfo(1)
-            }.fold(
-                { _getFriendProfileLiveData.value = UiState.Success(it) },
-                { _getFriendProfileLiveData.value = UiState.Failure(it.message.toString()) }
-            )
+            val result = userProfileRepository.getFriendProfile()
+            _getFriendProfileLiveData.value = result
         }
     }
 }
