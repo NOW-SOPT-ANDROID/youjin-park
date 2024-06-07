@@ -1,4 +1,4 @@
-package com.sopt.now.test.data
+package com.sopt.now.test.data.api
 
 import com.sopt.now.test.data.dto.request.RequestLoginDto
 import com.sopt.now.test.data.dto.request.RequestSignUpDto

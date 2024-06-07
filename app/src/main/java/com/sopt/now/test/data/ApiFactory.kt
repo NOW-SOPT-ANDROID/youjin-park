@@ -2,6 +2,9 @@ package com.sopt.now.test.data
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sopt.now.BuildConfig
+import com.sopt.now.test.data.api.AuthService
+import com.sopt.now.test.data.api.FriendService
+import com.sopt.now.test.data.api.UserService
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -35,15 +38,15 @@ object ApiFactory {
             .build()
     }
 
-    private fun provideOkHttpClient(interceptor: HeaderInterceptor): OkHttpClient
-            = OkHttpClient.Builder().run {
-        addInterceptor(interceptor)
-        build()
-    }
+    private fun provideOkHttpClient(interceptor: HeaderInterceptor): OkHttpClient =
+        OkHttpClient.Builder().run {
+            addInterceptor(interceptor)
+            build()
+        }
 
     class HeaderInterceptor : Interceptor {
         @Throws(IOException::class)
-        override fun intercept(chain: Interceptor.Chain) : Response = with(chain) {
+        override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
             val newRequest = request().newBuilder()
                 .addHeader("memberId", userPreference.getUserId().toString())
                 .build()
