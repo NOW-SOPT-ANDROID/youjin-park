@@ -14,28 +14,4 @@ class UserPreference(context: Context) {
     fun getUserId(): String? {
         return sharedPreferences.getString("userId", null)
     }
-
-    // 사용자 데이터 저장
-    fun saveUserData(userData: UserData) {
-        with(sharedPreferences.edit()){
-            putString("userId", userData.userId)
-            putString("userName", userData.userName)
-            putString("userPhone", userData.userPhone)
-            apply()
-        }
-    }
-
-    // 사용자 데이터 가져오기
-    fun getUserData(): UserData? {
-        with(sharedPreferences){
-            val userId = getString("userId", null)
-            val userName = getString("userName", null)
-            val userPhone = getString("userPhone", null)
-
-            // takeIf 사용
-            return userId?.takeIf { userName != null && userPhone != null }?.let {
-                UserData(userId, userName!!, userPhone!!)
-            }
-        }
-    }
 }
