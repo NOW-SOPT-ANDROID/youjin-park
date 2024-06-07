@@ -1,4 +1,6 @@
-package com.sopt.now.compose
+package com.sopt.now.compose.presentation
+
+import androidx.compose.runtime.livedata.observeAsState
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sopt.now.compose.BottomNavigationItem
 import com.sopt.now.compose.ui.theme.NOWSOPTAndroidTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,18 +40,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val viewModel: UserInfoViewModel = remember { UserInfoViewModel() }
 
-                    val userId = intent.getStringExtra("userId").toString()
-                    val userPw = intent.getStringExtra("userPw").toString()
-                    val userName = intent.getStringExtra("userName").toString()
-                    val userDescription = intent.getStringExtra("userDescription").toString()
-
-                    MainView(
-                        userId = userId,
-                        userPw = userPw,
-                        userName = userName,
-                        userDescription = userDescription
-                    )
+                    MainView(viewModel)
                 }
             }
         }
@@ -56,7 +50,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainView(userId: String, userPw: String, userName: String, userDescription: String) {
+fun MainView(viewModel: UserInfoViewModel) {
     var selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf(
         BottomNavigationItem(
@@ -85,26 +79,46 @@ fun MainView(userId: String, userPw: String, userName: String, userDescription: 
                     )
                 }
             }
-        },
+        }
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding),
+            modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             when(selectedItem) {
-                0 -> {
-                    HomeView()
-                }
-                1 -> {
-                    Text(text ="Search")
-                }
-                2 -> {
-                    MyPageView(userId, userPw, userName, userDescription)
-                }
+                0 -> SetHomeView(viewModel)
+                1 -> Text(text ="Search")
+                2 -> SetMyPageView(viewModel)
             }
-
         }
+    }
+}
+
+// 사용자 데이터 적용
+@Composable
+fun SetHomeView(viewModel: UserInfoViewModel){
+
+    viewModel.userInfo()
+
+    viewModel.userInfoLiveData.observeAsState().value?.let { userInfo ->
+        HomeView(
+            userName = userInfo.data.nickname,
+            userPhone = userInfo.data.phone,
+        )
+    }
+}
+
+@Composable
+fun SetMyPageView(viewModel: UserInfoViewModel){
+
+    viewModel.userInfo()
+
+    viewModel.userInfoLiveData.observeAsState().value?.let { userInfo ->
+        MyPageView(
+            userId = userInfo.data.authenticationId,
+            userPw = userInfo.data.nickname,
+            userPhone = userInfo.data.phone,
+        )
     }
 }
 
@@ -112,6 +126,6 @@ fun MainView(userId: String, userPw: String, userName: String, userDescription: 
 @Composable
 fun MainPreview() {
     NOWSOPTAndroidTheme {
-        MainView("Id1234", "Password123", "UserName", "ISTP 입니다!")
+        MyPageView("", "", "")
     }
 }
