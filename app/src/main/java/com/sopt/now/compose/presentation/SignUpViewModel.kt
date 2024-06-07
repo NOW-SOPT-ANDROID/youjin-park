@@ -1,60 +1,26 @@
 package com.sopt.now.compose.presentation
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
-import com.sopt.now.compose.data.BaseState
-import com.sopt.now.compose.data.ServicePool
+import androidx.lifecycle.viewModelScope
+import com.sopt.now.compose.core.view.UiState
+import com.sopt.now.compose.data.UserPreference
 import com.sopt.now.compose.data.dto.request.RequestSignUpDto
 import com.sopt.now.compose.data.dto.response.ResponseAuthDto
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.sopt.now.compose.data.repository.SignUpRepository
+import kotlinx.coroutines.launch
 
+class SignUpViewModel(
+    private val signUpRepository: SignUpRepository,
+    private val userPreference: UserPreference
+) : ViewModel() {
+    private val _postSignUpLiveData: MutableLiveData<UiState<ResponseAuthDto>> = MutableLiveData()
+    val postSignUpLiveData: MutableLiveData<UiState<ResponseAuthDto>> = _postSignUpLiveData
 
-class SignUpViewModel : ViewModel() {
-    private val authService by lazy { ServicePool.authService }
-    val liveData = MutableLiveData<BaseState>()
-
-    fun signUp(request: RequestSignUpDto) {
-        authService.signUp(request).enqueue(object : Callback<ResponseAuthDto> {
-            override fun onResponse(
-                call: Call<ResponseAuthDto>,
-                response: Response<ResponseAuthDto>,
-            ) {
-                if (response.isSuccessful) {
-                    val data: ResponseAuthDto? = response.body()
-                    val userId = response.headers()["location"]
-                    liveData.value = BaseState(
-                        isSuccess = true,
-                        message = "회원가입 성공 유저의 ID는 $userId 입니다."
-                    )
-                    Log.d("SignUp", "data: $data, userId: $userId")
-                } else {
-                    val error = response.errorBody()?.string()
-                    val gson = Gson()
-                    try {
-                        val errorResponse = gson.fromJson(error, ResponseAuthDto::class.java)
-                        liveData.value = BaseState(
-                            isSuccess = false,
-                            message = "회원가입 실패: ${errorResponse.message}" // 에러 메시지 사용
-                        )
-                    } catch (e: Exception) {
-                        liveData.value = BaseState(
-                            isSuccess = false,
-                            message = "회원가입 실패: 에러 메시지 파싱 실패"
-                        )
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseAuthDto>, t: Throwable) {
-                liveData.value = BaseState(
-                    isSuccess = false,
-                    message = "서버 에러"
-                )
-            }
-        })
+    fun postSignUp(requestSignUp: RequestSignUpDto) {
+        viewModelScope.launch {
+            val result = signUpRepository.postSignUp(requestSignUp)
+            _postSignUpLiveData.value = result
+        }
     }
 }
